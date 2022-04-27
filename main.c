@@ -332,7 +332,7 @@ void print_book(hashtable_t *library, char book_name[MAX_BOOK_LEN]) {
 		printf(BOOK_NOT_FOUND);
 	} else {
 		 book_t *book = (book_t *)ht_get(library, book_name);
-		 printf("%f %d", book.rating, book.purchases);
+		 printf("%f %d", book->rating, book->purchases);
 	}	
 }
 
@@ -372,13 +372,13 @@ int main(void) {
 			def_t input;
 			scanf("%s %s %s", book_name, input.def_key, input.def_val);
 			book_t *b = (book_t *)ht_get(library, book_name);
-			ht_put(b.book, input.def_key, strlen(input.def_key) + 1, &input, sizeof(def_t));
+			ht_put(b->book, input.def_key, strlen(input.def_key) + 1, &input, sizeof(def_t));
 		} else if (strcmp(command, "GET_DEF") == 0) {
 			def_t input;
 			scanf("%s %s", book_name, input.def_key);
 			book_t *b = (book_t *)ht_get(library, book_name);
 			b->book = (hashtable_t *)ht_get(b->book, input.def_key);
-			printf("%s\n", b->definitions->def_val);
+			printf("%s\n", b->definitions.def_val);
 		} else if (strcmp(command, "RMV_DEF") == 0) {
 			def_t input;
 			scanf("%s %s", book_name, input.def_key);
