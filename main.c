@@ -349,26 +349,25 @@ int check_for_resize(hashtable_t *ht) {
 	int check = 0;
 	float num_entries = ht->size;
 	float load_factor = num_entries / ht->hmax;
-	printf("%f\n", load_factor);
 	if (load_factor > 1) {
 		check = 1;
 	}
 	return check;
 }
 
-void RESIZE_HASHTABLE(hashtable_t *ht) {
+void RESIZE_HASHTABLE(hashtable_t *ht, int key_size, int value_size) {
 	int new_size = ht->hmax * 2;
 	hashtable_t *new_ht = ht_create(new_size, hash_function_string, compare_function_strings);
 	for (int i = 0; i < ht->hmax; i++) {
 		node_t *current = ht->buckets[i]->head;
 		while (current) {
 			info *data = (info *)current->data;
-			ht_put(new_ht, data->key, sizeof(data->key), data->value, sizeof(data->value));
+			ht_put(new_ht, data->key, key_size, data->value, value_size);
 			current = current->next;
 		}
 	}
+	memcpy(ht, new_ht, sizeof(hashtable_t));
 	ht_free(&ht);
-	memcpy(ht, new_ht, sizeof(hashtable_t *));
 }
 
 void print_book(hashtable_t *library, char book_name[MAX_BOOK_LEN]) {
@@ -516,10 +515,11 @@ void ADD_USER(hashtable_t **user) {
 		new_user.banned = 0;
 		new_user.borrow = 0;
 		new_user.points = 100;
-		printf("size = %d\n", (*user)->size / (*user)->hmax);
 		int ok = check_for_resize(*user);
 		if (ok == 1) {
-			RESIZE_HASHTABLE(*user);
+			int key_size = MAX_DEF_LEN;
+			int value_size = sizeof(user_t);
+			RESIZE_HASHTABLE(*user, key_size, value_size);
 		}
 		ht_put(*user, new_user.user_name, strlen(new_user.user_name) + 1, &new_user, sizeof(user_t));
 	}
@@ -616,8 +616,6 @@ void LOST_BOOK(hashtable_t **user, hashtable_t **library) {
 		}
 	}
 }
-
-
 
 int main(void) {
 	hashtable_t *library = ht_create(HMAX_LIBRARY, hash_function_string, compare_function_strings);
