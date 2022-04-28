@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define HMAX 10
+#define HMAX_LIBRARY 10
+#define HMAX_USERS 10
+#define HMAX_BOOKS 10
 #define MAX_BOOK_LEN 40
 #define MAX_STRING_SIZE 256
 #define MAX_DEF_LEN 20
@@ -343,6 +345,32 @@ ht_free(hashtable_t **ht)
 	free(*ht);
 }
 
+int check_for_resize(hashtable_t *ht) {
+	int check = 0;
+	float num_entries = ht->size;
+	float load_factor = num_entries / ht->hmax;
+	printf("%f\n", load_factor);
+	if (load_factor > 1) {
+		check = 1;
+	}
+	return check;
+}
+
+void RESIZE_HASHTABLE(hashtable_t *ht) {
+	int new_size = ht->hmax * 2;
+	hashtable_t *new_ht = ht_create(new_size, hash_function_string, compare_function_strings);
+	for (int i = 0; i < ht->hmax; i++) {
+		node_t *current = ht->buckets[i]->head;
+		while (current) {
+			info *data = (info *)current->data;
+			ht_put(new_ht, data->key, sizeof(data->key), data->value, sizeof(data->value));
+			current = current->next;
+		}
+	}
+	ht_free(&ht);
+	memcpy(ht, new_ht, sizeof(hashtable_t *));
+}
+
 void print_book(hashtable_t *library, char book_name[MAX_BOOK_LEN]) {
 	if (ht_has_key(library, book_name) == 0) {
 		printf(BOOK_NOT_FOUND);
@@ -444,7 +472,7 @@ void ADD_BOOK(hashtable_t **library, book_t new_book) {
 	new_book.purchases = 0;
 	new_book.rating = 0;
 	new_book.borrowed = 0;
-	new_book.book = ht_create(HMAX, hash_function_string, compare_function_strings);
+	new_book.book = ht_create(HMAX_BOOKS, hash_function_string, compare_function_strings);
 	scanf("%s %d", new_book.name, &def_number);
 
 	while (num != def_number) {
@@ -458,10 +486,142 @@ void ADD_BOOK(hashtable_t **library, book_t new_book) {
 	ht_free(&new_book.book);
 }
 
+void GET_BOOK(hashtable_t *library) {
+	char book_name[MAX_BOOK_LEN];
+	scanf("%s", book_name);
+	if (ht_has_key(library, book_name) == 0) {
+		printf(BOOK_NOT_FOUND);
+	} else {
+		print_book(library, book_name);
+	}
+}
+
+void REMOVE_BOOK(hashtable_t **library) {
+	char book_name[MAX_BOOK_LEN];
+	scanf("%s", book_name);
+	if (ht_has_key(*library, book_name) == 0) {
+		printf(BOOK_NOT_FOUND);
+	} else {
+		ht_remove_entry(*library, book_name);
+	}
+}
+
+void ADD_USER(hashtable_t **user) {
+	
+	user_t new_user;
+	scanf("%s", new_user.user_name);
+	if (ht_has_key(*user, new_user.user_name) == 1) {
+		printf(USER_REGISTERED);
+	} else {
+		new_user.banned = 0;
+		new_user.borrow = 0;
+		new_user.points = 100;
+		printf("size = %d\n", (*user)->size / (*user)->hmax);
+		int ok = check_for_resize(*user);
+		if (ok == 1) {
+			RESIZE_HASHTABLE(*user);
+		}
+		ht_put(*user, new_user.user_name, strlen(new_user.user_name) + 1, &new_user, sizeof(user_t));
+	}
+}
+
+void BORROW_BOOK(hashtable_t **user, hashtable_t **library) {
+	char user_name[MAX_DEF_LEN], book_name[MAX_BOOK_LEN];
+	int days_available;
+	scanf("%s %s %d", user_name, book_name, &days_available);
+	if (ht_has_key(*user, user_name) == 0) {
+		printf(USER_NOT_REGISTERED);
+	} else {
+		int valid = 1;
+		user_t *u = (user_t *)ht_get(*user, user_name);
+		if (u->banned == 1) {
+			printf(BANNED_USER);
+			valid = 0;
+		} else if (u->borrow == 1) {
+			printf(USER_BORROWED);
+			valid = 0;
+		}
+		if (ht_has_key(*library, book_name) == 0) {
+			printf(BOOK_NOT_FOUND);
+			valid = 0;
+		} else {
+			book_t *b = (book_t *)ht_get(*library, book_name);
+			if (b->borrowed == 1) {
+				printf(BORROWED_BOOK);
+			} else if (valid == 1 && b->borrowed == 0) {
+				u->borrow = 1;
+				u->days = days_available;
+				b->borrowed = 1;
+				memcpy(u->book_name, book_name, strlen(book_name) + 1);
+			}
+		}
+	}
+}
+
+void RETURN_BOOK(hashtable_t **user, hashtable_t **library) {
+	char user_name[MAX_DEF_LEN], book_name[MAX_BOOK_LEN];
+	int rating, days_since_borrow;
+	scanf("%s %s %d %d", user_name, book_name, &days_since_borrow, &rating);
+	user_t *u = (user_t *)ht_get(*user, user_name);
+	int valid = 0;
+	if (u->banned == 1) {
+		printf(BANNED_USER);
+		valid = 1;
+	}
+
+	if (valid == 0) {
+		if (days_since_borrow - u->days > 0) {
+			int lost_points = (days_since_borrow - u->days) * 2;
+			u->points = u->points - lost_points;
+		}
+		if (days_since_borrow - u->days < 0) {
+			u->points = u->points + u->days - days_since_borrow;
+		}
+		if (u->points < 0) {
+			u->banned = 1;
+			printf("The user %s has been banned.\n", user_name);
+		}
+		if (strcmp(u->book_name, book_name) != 0 || u->borrow == 0) {
+			printf("You didn't borrow this book.\n");
+		} else {
+			u->borrow = 0;
+			book_t *b = (book_t *)ht_get(*library, book_name);
+			b->purchases = b->purchases + 1;
+			b->rating = (b->rating + rating) / b->purchases;
+			b->borrowed = 0;
+		}
+	}
+}
+
+void LOST_BOOK(hashtable_t **user, hashtable_t **library) {
+	char user_name[MAX_DEF_LEN], book_name[MAX_BOOK_LEN];
+	scanf("%s %s", user_name, book_name);
+	int valid = 1;
+	if (ht_has_key(*user, user_name) == 0) {
+		printf(USER_NOT_REGISTERED);
+		valid = 0;
+	}
+	if (valid == 1) {
+		user_t *u = (user_t *)ht_get(*user, user_name);
+		if (u->banned == 1) {
+			printf(BANNED_USER);
+		} else {
+			u->points = u->points - 50;
+			if (u->points < 0) {
+				u->banned = 1;
+				printf("The user %s has been banned.\n", user_name);
+			}
+			u->borrow = 0;
+			ht_remove_entry(*library, book_name);
+		}
+	}
+}
+
+
+
 int main(void) {
-	hashtable_t *library = ht_create(HMAX, hash_function_string, compare_function_strings);
-	hashtable_t *user = ht_create(HMAX, hash_function_string, compare_function_strings);
-	int def_number, num, days_available, days_since_borrow, rating;
+	hashtable_t *library = ht_create(HMAX_LIBRARY, hash_function_string, compare_function_strings);
+	hashtable_t *user = ht_create(HMAX_USERS, hash_function_string, compare_function_strings);
 	char book_name[MAX_BOOK_LEN], user_name[MAX_DEF_LEN];
 	book_t new_book;
 	while (1) {
@@ -469,26 +629,10 @@ int main(void) {
 		scanf("%s", command);
 		if (strcmp(command, "ADD_BOOK") == 0) {
 			ADD_BOOK(&library, new_book);
-		} else if (strcmp(command, "EXIT") == 0) {
-			print_top_books(library);
-			print_top_users(user);
-			ht_free(&library);
-			ht_free(&user);
-			break;
 		} else if (strcmp(command, "GET_BOOK") == 0) {
-			scanf("%s", book_name);
-			if (ht_has_key(library, book_name) == 0) {
-				printf(BOOK_NOT_FOUND);
-			} else {
-				print_book(library, book_name);
-			}
+			GET_BOOK(library);
 		} else if (strcmp(command, "RMV_BOOK") == 0) {
-			scanf("%s", book_name);
-			if (ht_has_key(library, book_name) == 0) {
-				printf(BOOK_NOT_FOUND);
-			} else {
-				ht_remove_entry(library, book_name);
-			}
+			REMOVE_BOOK(&library);
 		} else if (strcmp(command, "ADD_DEF") == 0) {
 			char key[30], val[30];
 			scanf("%s %s %s", book_name, key, val);
@@ -530,96 +674,19 @@ int main(void) {
 				}
 			}
 		} else if (strcmp(command, "ADD_USER") == 0) {
-			user_t new_user;
-			scanf("%s", new_user.user_name);
-			if (ht_has_key(user, new_user.user_name) == 1) {
-				printf(USER_REGISTERED);
-			} else {
-				new_user.banned = 0;
-				new_user.borrow = 0;
-				new_user.points = 100;
-				ht_put(user, new_user.user_name, strlen(new_user.user_name) + 1, &new_user, sizeof(user_t));
-			}
+			ADD_USER(&user);
 		} else if (strcmp(command, "BORROW") == 0) {
-			scanf("%s %s %d", user_name, book_name, &days_available);
-			if (ht_has_key(user, user_name) == 0) {
-				printf(USER_NOT_REGISTERED);
-			} else {
-				int valid = 1;
-				user_t *u = (user_t *)ht_get(user, user_name);
-				if (u->banned == 1) {
-					printf(BANNED_USER);
-					valid = 0;
-				} else if (u->borrow == 1) {
-					printf(USER_BORROWED);
-					valid = 0;
-				}
-				if (ht_has_key(library, book_name) == 0) {
-					printf(BOOK_NOT_FOUND);
-					valid = 0;
-				} else {
-					book_t *b = (book_t *)ht_get(library, book_name);
-					if (b->borrowed == 1) {
-						printf(BORROWED_BOOK);
-					} else if (valid == 1 && b->borrowed == 0) {
-						u->borrow = 1;
-						u->days = days_available;
-						b->borrowed = 1;
-						memcpy(u->book_name, book_name, strlen(book_name) + 1);
-					}
-				}
-			}
+			BORROW_BOOK(&user, &library);
 		} else if (strcmp(command, "RETURN") == 0) {
-			scanf("%s %s %d %d", user_name, book_name, &days_since_borrow, &rating);
-			user_t *u = (user_t *)ht_get(user, user_name);
-			int valid = 0;
-			if (u->banned == 1) {
-				printf(BANNED_USER);
-				valid = 1;
-			}
-
-			if (valid == 0) {
-				if (days_since_borrow - u->days > 0) {
-					int lost_points = (days_since_borrow - u->days) * 2;
-					u->points = u->points - lost_points;
-				}
-				if (days_since_borrow - u->days < 0) {
-					u->points = u->points + u->days - days_since_borrow;
-				}
-				if (u->points < 0) {
-					u->banned = 1;
-					printf("The user %s has been banned.\n", user_name);
-				}
-				if (strcmp(u->book_name, book_name) != 0 || u->borrow == 0) {
-					printf("You didn't borrow this book.\n");
-				} else {
-					u->borrow = 0;
-					book_t *b = (book_t *)ht_get(library, book_name);
-					b->purchases = b->purchases + 1;
-					b->rating = (b->rating + rating) / b->purchases;
-					b->borrowed = 0;
-				}
-			}
+			RETURN_BOOK(&user, &library);
 		} else if (strcmp(command, "LOST") == 0) {
-			scanf("%s %s", user_name, book_name);
-			int valid = 1;
-			if (ht_has_key(user, user_name) == 0) {
-				printf(USER_NOT_REGISTERED);
-				valid = 0;
-			}
-			if (valid == 1) {
-				user_t *u = (user_t *)ht_get(user, user_name);
-				if (u->banned == 1) {
-					printf(BANNED_USER);
-				} else {
-					u->points = u->points - 50;
-					if (u->points < 0) {
-						u->banned = 1;
-						printf("The user %s has been banned.\n", user_name);
-					}
-					ht_remove_entry(library, book_name);
-				}
-			}
+			LOST_BOOK(&user, &library);
+		} else if (strcmp(command, "EXIT") == 0) {
+			print_top_books(library);
+			print_top_users(user);
+			ht_free(&library);
+			ht_free(&user);
+			break;
 		}
 	}
 	return 0;
