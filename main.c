@@ -370,6 +370,9 @@ void RESIZE_HASHTABLE(hashtable_t **ht, int value_size) {
             prev = current;
 			info *data = (info *)current->data;
             int key_size = strlen((char *)data->key);
+			if (value_size == -1) {
+				value_size = strlen((char *)data->value);
+			}
 			ht_put(new_ht, data->key, key_size, data->value, value_size);
             free(data->key);
             free(data->value);
@@ -397,19 +400,19 @@ void print_book(hashtable_t *library, char book_name[MAX_BOOK_LEN]) {
 }
 
 void print_top_books(hashtable_t *library) {
-	char top_book_name[10][MAX_BOOK_LEN];
+	char top_book_name[library->size][MAX_BOOK_LEN];
 	int n_size = 0, r_size = 0, p_size = 0;
-	float top_book_rating[10];
-	int top_book_purchases[10];
+	float top_book_rating[library->size];
+	int top_book_purchases[library->size];
 
 	for (int i = 0; i < library->hmax; i++) {
 		node_t *current = library->buckets[i]->head;
 		while (current) {
 			info *data = (info *)current->data;
 			book_t *book_data = (book_t *)data->value;
-			char *rest = book_data->name;
-			char *ptr = strtok_r(rest, "\"", &rest);
-			memcpy(top_book_name[n_size++], ptr, strlen(ptr) + 1);
+			//char *rest = book_data->name;
+			//char *ptr = strtok_r(rest, "\"", &rest);
+			memcpy(top_book_name[n_size++], book_data->name, strlen(book_data->name) + 1);
 			top_book_rating[r_size++] = book_data->rating;
 			top_book_purchases[p_size++] = book_data->purchases;
 			current = current->next;
@@ -433,7 +436,7 @@ void print_top_books(hashtable_t *library) {
 			}
 		}
 	}
-	printf("Top books rating:\n");
+	printf("Books rating:\n");
 	for (int i = 0; i < r_size; i++) {
 		printf("%d. Name:%s Rating:%0.3f Purchases:%d\n", i + 1, top_book_name[i], top_book_rating[i], top_book_purchases[i]);
 	}
@@ -450,9 +453,9 @@ void print_top_users(hashtable_t *users) {
 			info *data = (info *)current->data;
 			user_t *user_data = (user_t *)data->value;
 
-			char *rest = user_data->user_name;
-			char *ptr = strtok_r(rest, "\"", &rest);
-			memcpy(top_user_name[n_size++], ptr, strlen(ptr) + 1);
+			//char *rest = user_data->user_name;
+			//char *ptr = strtok_r(rest, "\"", &rest);
+			memcpy(top_user_name[n_size++], user_data->user_name, strlen(user_data->user_name) + 1);
 			top_user_points[p_size++] = user_data->points;
 			current = current->next;
 		}
@@ -473,7 +476,7 @@ void print_top_users(hashtable_t *users) {
 		}
 	}
 
-	printf("Top users rating:\n");
+	printf("Users rating:\n");
 	for (int i = 0; i < p_size; i++) {
 		printf("%d. Name:%s Points:%d\n", i + 1, top_user_name[i], top_user_points[i]);
 	}
@@ -481,20 +484,42 @@ void print_top_users(hashtable_t *users) {
 
 void ADD_BOOK(hashtable_t **library, book_t new_book) {
 	int num = 0;
-	int def_number;
+	char number[3];
 	new_book.purchases = 0;
 	new_book.rating = 0;
 	new_book.borrowed = 0;
 	new_book.book = ht_create(HMAX_BOOKS, hash_function_string, compare_function_strings);
-	scanf("%s %d", new_book.name, &def_number);
+	char line[MAX_STRING_SIZE];
+	fgets(line, MAX_STRING_SIZE - 1, stdin);
+	char *rest = line;
+	printf("%s\n", rest);
+	char *ptr = strtok_r(rest, "\"", &rest);
+
+	memcpy(new_book.name, ptr, strlen(ptr) + 1);
+	printf("%s name\n", new_book.name);
+	ptr = strtok_r(NULL, "\"", &rest);
+	memcpy(number, ptr, strlen(ptr) + 1);
+
+	int def_number = atoi(number);
 
 	while (num != def_number) {
-		char key[30], val[30];
+		char key[MAX_BOOK_LEN], val[MAX_DEF_LEN];
 		scanf("%s %s", key, val);
+
+		int ok = check_for_resize(new_book.book);
+		if (ok == 1) {
+			int value_size = -1;
+			RESIZE_HASHTABLE(&new_book.book, value_size);
+		}
 		ht_put(new_book.book, key, strlen(key) + 1, val, strlen(val) + 1);
 		num++;
 	}
-			
+	
+	int ok = check_for_resize(*library);
+	if (ok == 1) {
+		int value_size = sizeof(book_t);
+		RESIZE_HASHTABLE(library, value_size);
+	}
 	ht_put(*library, new_book.name, strlen(new_book.name) + 1, &new_book, sizeof(book_t));
 }
 
