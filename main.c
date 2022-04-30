@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #define HMAX_LIBRARY 10
 #define HMAX_USERS 10
@@ -155,8 +156,6 @@ node_t* remove_nth_node(ll_t *list, int n) {
 
     list->size--;
 	return curr;
-    free(curr->data);
-    free(curr);
 }
 
 int
@@ -204,7 +203,7 @@ hash_function_string(void *a)
 	 * Credits: http://www.cse.yorku.ca/~oz/hash.html
 	 */
 	unsigned char *puchar_a = (unsigned char*) a;
-	unsigned long hash = 5381;
+	unsigned int hash = 5381;
 	int c;
 
 	while ((c = *puchar_a++))
@@ -234,6 +233,7 @@ ht_has_key(hashtable_t *ht, void *key)
 {
 	int index = ht->hash_function(key) % ht->hmax;
 	ll_t *bucket = ht->buckets[index];
+	
 	node_t *current = bucket->head;
 	while (current) {
 		info *new_data = (info *)current->data;
@@ -250,6 +250,9 @@ ht_get(hashtable_t *ht, void *key)
 {
 	int index = ht->hash_function(key) % ht->hmax;
 	ll_t *bucket = ht->buckets[index];
+	if (bucket->size == 0) {
+		return NULL;
+	}
 	node_t *current = bucket->head;
 	info *new_data = (info *)current->data;
 
@@ -268,6 +271,7 @@ ht_get(hashtable_t *ht, void *key)
 			return new_data->value;
 		}
 	}
+	return NULL;
 }
 
 void
@@ -311,6 +315,9 @@ ht_remove_entry(hashtable_t *ht, void *key)
 	int cnt = 0;
 	node_t *current = bucket->head;
 	info *new_data = (info *)current->data;
+	if (ht_has_key(ht, key) == 0) {
+		return;
+	}
 	/*while (ht->compare_function(key, new_data->key)) {
 		cnt++;
 		if (current) {
@@ -340,6 +347,10 @@ ht_free(hashtable_t **ht, int type)
 {	
     node_t *current;
 	ll_t *bucket;
+	if (*ht == NULL) {
+		return;
+	}
+
 	for (int i = 0; i < (*ht)->hmax; i++) {
 		bucket = (*ht)->buckets[i];
 		current = bucket->head;
@@ -440,13 +451,13 @@ void print_book(hashtable_t *library, char book_name[MAX_BOOK_LEN]) {
 int cmp(const void *a, const void *b) {
 	book_t x = *(book_t *)a;
 	book_t y = *(book_t *)b;
-	if (abs(x.rating - y.rating) < EPS && x.purchases == x.purchases) {
+	if (fabs(x.rating - y.rating) < EPS && x.purchases == y.purchases) {
 		return strcmp(x.name, y.name);
 	}
-	if (abs(x.rating - y.rating) < EPS) {
-		return x.purchases - y.purchases;
-	}
-	return x.rating - y.rating;
+	if (fabs(x.rating - y.rating) < EPS) {
+		return y.purchases - x.purchases;
+	} 
+	return ceil(y.rating - x.rating);
 }
 
 void print_top_books(hashtable_t *library) {
@@ -471,45 +482,7 @@ void print_top_books(hashtable_t *library) {
 			current = current->next;
 		}
 	}
-/*	for (int i = 0; i < r_size; i++) {
-		for (int j = i + 1; j < r_size; j++) {
-			if (top_book_rating[i] < top_book_rating[j]) {
-				float aux_f = top_book_rating[i];
-				top_book_rating[i] = top_book_rating[j];
-				top_book_rating[j] = aux_f;
-
-				int aux_i = top_book_purchases[i];
-				top_book_purchases[i] = top_book_purchases[j];
-				top_book_purchases[j] = aux_i;
-
-				char aux_c[MAX_BOOK_LEN];
-				memcpy(aux_c, top_book_name[i], strlen(top_book_name[i]) + 1);
-				memcpy(top_book_name[i], top_book_name[j], strlen(top_book_name[j]) + 1);
-				memcpy(top_book_name[j], aux_c, strlen(aux_c) + 1);
-			} else if (top_book_rating[i] == top_book_rating[j]) {
-				if (top_book_purchases[i] < top_book_purchases[j]) {
-					int aux_i = top_book_purchases[i];
-					top_book_purchases[i] = top_book_purchases[j];
-					top_book_purchases[j] = aux_i;
-
-					char aux_c[MAX_BOOK_LEN];
-					memcpy(aux_c, top_book_name[i], strlen(top_book_name[i]) + 1);
-					memcpy(top_book_name[i], top_book_name[j], strlen(top_book_name[j]) + 1);
-					memcpy(top_book_name[j], aux_c, strlen(aux_c) + 1);
-				}
-			} else if (top_book_rating[i] == top_book_rating[j] && top_book_purchases[i] == top_book_purchases[j]) {
-					if (strcmp(top_book_name[i], top_book_name[j]) > 0) {
-						char aux_c[MAX_BOOK_LEN];
-						memcpy(aux_c, top_book_name[i], strlen(top_book_name[i]) + 1);
-						memcpy(top_book_name[i], top_book_name[j], strlen(top_book_name[j]) + 1);
-						memcpy(top_book_name[j], aux_c, strlen(aux_c) +  1);
-						
-					}
-				}
-			}
-		}
-*/
-	qsort(books, size, sizeof(book_t), cmp);
+	qsort(books, library->size, sizeof(book_t), cmp);
 	printf("Books ranking:\n");
 	for (int i = 0; i < size; i++) {
 		printf("%d. Name:%s Rating:%0.3f Purchases:%d\n", i + 1, books[i].name, books[i].rating, books[i].purchases);
@@ -690,8 +663,7 @@ void BORROW_BOOK(hashtable_t **user, hashtable_t **library) {
 		} else if (u->borrow == 1) {
 			printf("%s", USER_BORROWED);
 			valid = 0;
-		}
-		if (ht_has_key(*library, book_name) == 0) {
+		} else if (ht_has_key(*library, book_name) == 0) {
 			printf("%s", BOOK_NOT_FOUND);
 			valid = 0;
 		} else if (valid == 1){
@@ -786,7 +758,11 @@ void LOST_BOOK(hashtable_t **user, hashtable_t **library) {
 				u->banned = 1;
 				printf("The user %s has been banned from this library.\n", user_name);
 			}
-			u->borrow = 0;	
+			u->borrow = 0;
+			if (ht_has_key(*library, book_name) == 0) {
+				printf("%s", BOOK_NOT_FOUND);
+				return;
+			}
 			book_t *b = (book_t *)ht_get(*library, book_name);
 			hashtable_t *defs = (hashtable_t *)b->book;
 			ht_free(&defs, 2);
@@ -800,10 +776,10 @@ int main(void) {
 	hashtable_t *user = ht_create(HMAX_USERS, hash_function_string, compare_function_strings);
 	char book_name[MAX_BOOK_LEN], user_name[MAX_DEF_LEN];
 	book_t new_book;
-
 	while (1) {
 		char command[MAX_STRING_SIZE];
 		scanf("%s", command);
+		//printf("%s\n", command);
 		if (strcmp(command, "ADD_BOOK") == 0) {
 			ADD_BOOK(&library, new_book);
 		} else if (strcmp(command, "GET_BOOK") == 0) {
