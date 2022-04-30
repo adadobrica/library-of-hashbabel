@@ -8,6 +8,7 @@
 #define MAX_BOOK_LEN 40
 #define MAX_STRING_SIZE 256
 #define MAX_DEF_LEN 20
+#define EPS 1e-3
 
 #define USER_REGISTERED "User is already registered.\n"
 #define USER_NOT_REGISTERED "You are not registered yet.\n"
@@ -436,26 +437,41 @@ void print_book(hashtable_t *library, char book_name[MAX_BOOK_LEN]) {
 	}	
 }
 
+int cmp(const void *a, const void *b) {
+	book_t x = *(book_t *)a;
+	book_t y = *(book_t *)b;
+	if (abs(x.rating - y.rating) < EPS && x.purchases == x.purchases) {
+		return strcmp(x.name, y.name);
+	}
+	if (abs(x.rating - y.rating) < EPS) {
+		return x.purchases - y.purchases;
+	}
+	return x.rating - y.rating;
+}
+
 void print_top_books(hashtable_t *library) {
 	char top_book_name[library->size][MAX_BOOK_LEN];
 	int n_size = 0, r_size = 0, p_size = 0;
 	float top_book_rating[library->size];
 	int top_book_purchases[library->size];
+	int size = 0;
+	book_t *books = malloc(library->size * sizeof(book_t));
 
 	for (int i = 0; i < library->hmax; i++) {
 		node_t *current = library->buckets[i]->head;
 		while (current) {
 			info *data = (info *)current->data;
 			book_t *book_data = (book_t *)data->value;
-			char *rest = book_data->name;
-			char *ptr = strtok_r(rest, "\"", &rest);
-			memcpy(top_book_name[n_size++], book_data->name, strlen(book_data->name) + 1);
-			top_book_rating[r_size++] = book_data->rating;
-			top_book_purchases[p_size++] = book_data->purchases;
+			//char *rest = book_data->name;
+			//char *ptr = strtok_r(rest, "\"", &rest);
+			//memcpy(top_book_name[n_size++], book_data->name, strlen(book_data->name) + 1);
+			//top_book_rating[r_size++] = book_data->rating;
+			//top_book_purchases[p_size++] = book_data->purchases;
+			books[size++] = *book_data;
 			current = current->next;
 		}
 	}
-	for (int i = 0; i < r_size; i++) {
+/*	for (int i = 0; i < r_size; i++) {
 		for (int j = i + 1; j < r_size; j++) {
 			if (top_book_rating[i] < top_book_rating[j]) {
 				float aux_f = top_book_rating[i];
@@ -471,20 +487,34 @@ void print_top_books(hashtable_t *library) {
 				memcpy(top_book_name[i], top_book_name[j], strlen(top_book_name[j]) + 1);
 				memcpy(top_book_name[j], aux_c, strlen(aux_c) + 1);
 			} else if (top_book_rating[i] == top_book_rating[j]) {
-				if (strcmp(top_book_name[i], top_book_name[j]) > 0) {
+				if (top_book_purchases[i] < top_book_purchases[j]) {
+					int aux_i = top_book_purchases[i];
+					top_book_purchases[i] = top_book_purchases[j];
+					top_book_purchases[j] = aux_i;
+
 					char aux_c[MAX_BOOK_LEN];
 					memcpy(aux_c, top_book_name[i], strlen(top_book_name[i]) + 1);
 					memcpy(top_book_name[i], top_book_name[j], strlen(top_book_name[j]) + 1);
 					memcpy(top_book_name[j], aux_c, strlen(aux_c) + 1);
+				}
+			} else if (top_book_rating[i] == top_book_rating[j] && top_book_purchases[i] == top_book_purchases[j]) {
+					if (strcmp(top_book_name[i], top_book_name[j]) > 0) {
+						char aux_c[MAX_BOOK_LEN];
+						memcpy(aux_c, top_book_name[i], strlen(top_book_name[i]) + 1);
+						memcpy(top_book_name[i], top_book_name[j], strlen(top_book_name[j]) + 1);
+						memcpy(top_book_name[j], aux_c, strlen(aux_c) +  1);
+						
 					}
 				}
 			}
 		}
-
+*/
+	qsort(books, size, sizeof(book_t), cmp);
 	printf("Books ranking:\n");
-	for (int i = 0; i < r_size; i++) {
-		printf("%d. Name:%s Rating:%0.3f Purchases:%d\n", i + 1, top_book_name[i], top_book_rating[i], top_book_purchases[i]);
+	for (int i = 0; i < size; i++) {
+		printf("%d. Name:%s Rating:%0.3f Purchases:%d\n", i + 1, books[i].name, books[i].rating, books[i].purchases);
 	}
+	free(books);
 }
 
 void print_top_users(hashtable_t *users) {
@@ -524,9 +554,9 @@ void print_top_users(hashtable_t *users) {
 					memcpy(top_user_name[i], top_user_name[j], strlen(top_user_name[j]) + 1);
 					memcpy(top_user_name[j], aux_c, strlen(aux_c) + 1);
 
-				//	int aux_i = top_user_points[i];
-				//	top_user_points[i] = top_user_points[j];
-				//	top_user_points[j] = aux_i;
+					//float aux_f = top_user_rating[i];
+					//top_user_rating[i] = top_user_rating[j];
+					//top_user_rating[j] = aux_f;
 				}
 			}
 		}
@@ -716,7 +746,12 @@ void RETURN_BOOK(hashtable_t **user, hashtable_t **library) {
 			}
 			if (u->points < 0) {
 				u->banned = 1;
-				printf("The user %s has been banned.\n", user_name);
+				u->borrow = 0;
+				book_t *b = (book_t *)ht_get(*library, book_name);
+				b->purchases = b->purchases + 1;
+				b->rating = (b->rating * (b->purchases - 1) + rating) / b->purchases;
+				b->borrowed = 0;
+				printf("The user %s has been banned from this library.\n", user_name);
 			} else  {
 				u->borrow = 0;
 				book_t *b = (book_t *)ht_get(*library, book_name);
