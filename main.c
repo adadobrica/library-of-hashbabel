@@ -202,14 +202,17 @@ hash_function_string(void *a)
 	/*
 	 * Credits: http://www.cse.yorku.ca/~oz/hash.html
 	 */
-	unsigned char *puchar_a = (unsigned char*) a;
-	unsigned int hash = 5381;
+	char *p = a;
+	unsigned long hash = 5381;
 	int c;
 
-	while ((c = *puchar_a++))
-		hash = ((hash << 5u) + hash) + c; /* hash * 33 + c */
-
-	return hash;
+	while (*p) {
+		hash = (((hash << 5u) + hash) + *p);
+		++p;
+	
+	}
+	//hash = abs(hash);
+	return hash & ~(1 << 31);
 }
 
 hashtable_t *
@@ -291,12 +294,10 @@ ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 			data->value = tmp;
 			memcpy(data->value, value, value_size);
 			found = 1;
-		}
-		current = current->next;
-		if (found == 1) {
 			free(new_data);
 			return;
 		}
+		current = current->next;
 	}
 	new_data->key = malloc(key_size);
 	new_data->value = malloc(value_size);
@@ -704,7 +705,7 @@ void RETURN_BOOK(hashtable_t **user, hashtable_t **library) {
 	}
 	int check = 0;
 	if (valid == 0) {
-		if (strcmp(u->book_name, book_name) != 0 || u->borrow == 0) {
+		if (u->borrow == 0 || strcmp(u->book_name, book_name) != 0) {
 			printf("You didn't borrow this book.\n");
 			check = 1;
 		}
