@@ -442,10 +442,14 @@ void print_book(hashtable_t *library, char book_name[MAX_BOOK_LEN]) {
 		printf("%s", BOOK_NOT_FOUND);
 	} else {
 		 book_t *book = (book_t *)ht_get(library, book_name);
-		 char name[MAX_BOOK_LEN];
-		 char *rest = book->name;
-		 char *ptr = strtok_r(rest, "\"", &rest);
-		 printf("Name:%s Rating:%0.3f Purchases:%d\n", ptr, book->rating, book->purchases);
+		 //char name[MAX_BOOK_LEN];
+		 //char *rest = book->name;
+		 //char *ptr = strtok_r(rest, "\"", &rest)
+		 printf("Name:");
+		 for (int i = 1, len = strlen(book->name); i < len - 2; i++) {
+			 printf("%c", book->name[i]);
+		 }
+		 printf(" Rating:%0.3f Purchases:%d\n", book->rating, book->purchases);
 	}	
 }
 
@@ -462,10 +466,6 @@ int cmp(const void *a, const void *b) {
 }
 
 void print_top_books(hashtable_t *library) {
-	char top_book_name[library->size][MAX_BOOK_LEN];
-	int n_size = 0, r_size = 0, p_size = 0;
-	float top_book_rating[library->size];
-	int top_book_purchases[library->size];
 	int size = 0;
 	book_t *books = malloc(library->size * sizeof(book_t));
 
@@ -474,11 +474,6 @@ void print_top_books(hashtable_t *library) {
 		while (current) {
 			info *data = (info *)current->data;
 			book_t *book_data = (book_t *)data->value;
-			//char *rest = book_data->name;
-			//char *ptr = strtok_r(rest, "\"", &rest);
-			//memcpy(top_book_name[n_size++], book_data->name, strlen(book_data->name) + 1);
-			//top_book_rating[r_size++] = book_data->rating;
-			//top_book_purchases[p_size++] = book_data->purchases;
 			books[size++] = *book_data;
 			current = current->next;
 		}
@@ -486,7 +481,6 @@ void print_top_books(hashtable_t *library) {
 	qsort(books, library->size, sizeof(book_t), cmp);
 	printf("Books ranking:\n");
 	for (int i = 0; i < size; i++) {
-		//printf("%d. Name:%s Rating:%0.3f Purchases:%d\n", i + 1, books[i].name, books[i].rating, books[i].purchases);
 		printf("%d. Name:", i + 1);
 		for (int j = 1, len = strlen(books[i].name); j < len - 2; j++) {
 			printf("%c", books[i].name[j]);
@@ -558,9 +552,9 @@ void get_book_name(char book_name[MAX_BOOK_LEN]) {
 		if (buff[strlen(buff) - 1] == '\"') {
 			valid = 1;
 		}
-		memcpy(book_name + len, buff, strlen(buff) + 1);
+		memmove(book_name + len, buff, strlen(buff) + 1);
 		len += strlen(buff);
-		memcpy(book_name + len, ch, sizeof(char *));
+		memmove(book_name + len, ch, sizeof(char *));
 		len++;
 	}
 }
@@ -568,7 +562,7 @@ void get_book_name(char book_name[MAX_BOOK_LEN]) {
 
 void ADD_BOOK(hashtable_t **library, book_t new_book) {
 	int num = 0, def_number;
-	char book_name[MAX_BOOK_LEN], garbage;
+	char book_name[MAX_BOOK_LEN], garbage, line[MAX_STRING_SIZE];
 	new_book.purchases = 0;
 	new_book.rating = 0;
 	new_book.borrowed = 0;
@@ -595,6 +589,8 @@ void ADD_BOOK(hashtable_t **library, book_t new_book) {
 	scanf("%c", &garbage);
 	get_book_name(book_name);
 	scanf("%d", &def_number);
+	//fgets(line, MAX_STRING_SIZE - 1, stdin);
+
 	memcpy(new_book.name, book_name, strlen(book_name) + 1);
 	while (num != def_number) {
 		char key[MAX_BOOK_LEN], val[MAX_DEF_LEN];
