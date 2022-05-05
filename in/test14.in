@@ -1,0 +1,849 @@
+ADD_BOOK "Dictionar POR-GR" 17
+feeling subtract
+purring living
+exuberant dapper
+late red
+bumpy horn
+pretend road
+ticket envious
+cool lying
+throat striped
+knotty parched
+burst lip
+ill-informed spoon
+judicious wreck
+icky desire
+snails spare
+necessary twig
+charming thumb
+GET_BOOK "Dictionar POR-GR"
+ADD_DEF "Dictionar POR-GR" bumpy throat
+GET_DEF "Dictionar POR-GR" necessary
+ADD_DEF "Dictionar POR-GR" vivacious versed
+GET_DEF "Dictionar POR-GR" icky
+ADD_DEF "Dictionar FR-IT" cabbage guitar
+GET_DEF "Dictionar POR-GR" carriage
+ADD_USER Alison
+GET_BOOK "Dictionar IND-HIN"
+BORROW Alison "Dictionar POR-GR" 8
+ADD_DEF "Dictionar POR-GR" icky girls
+GET_BOOK "Dictionar POR-GR"
+ADD_USER Pace
+RETURN Alison "Dictionar POR-GR" 4 5
+ADD_USER Christian
+BORROW Christian "Dictionar POR-GR" 8
+GET_BOOK "Dictionar POR-GR"
+ADD_USER Walls
+RETURN Christian "Dictionar POR-GR" 20 2
+GET_DEF "Dictionar POR-GR" throat
+GET_DEF "Dictionar POR-GR" exuberant
+ADD_DEF "Dictionar POR-GR" milky graceful
+BORROW Alison "Dictionar POR-GR" 20
+GET_DEF "Dictionar POR-GR" late
+ADD_USER Schmitt
+RETURN Alison "Dictionar POR-GR" 13 1
+RMV_BOOK "Dictionar POR-GR"
+ADD_USER Virginia
+ADD_USER Jeremiah
+ADD_DEF "$" whistle tasteless
+ADD_DEF "$" one descriptive
+ADD_USER Jeffrey
+ADD_DEF "$" number six
+ADD_USER Sparks
+ADD_DEF "$" sun annoy
+ADD_BOOK "Dictionar DTH-FR" 20
+love money
+resolute admire
+nest wry
+romantic berry
+aromatic picayune
+note phone
+egg spotty
+marked unnatural
+eggnog breathe
+fowl wound
+lowly dynamic
+parcel rough
+wall things
+healthy bright
+brainy testy
+adamant town
+meek valuable
+healthy milky
+uttermost silk
+violent debt
+GET_BOOK "Dictionar DTH-FR"
+ADD_DEF "Dictionar DTH-FR" purple applaud
+BORROW Jeffrey "Dictionar DTH-FR" 22
+ADD_USER Cappetta
+GET_DEF "Dictionar DTH-FR" wall
+RETURN Jeffrey "Dictionar DTH-FR" 18 1
+GET_BOOK "Dictionar DTH-FR"
+GET_DEF "Dictionar IND-NOR" connect
+GET_BOOK "Dictionar DTH-FR"
+RMV_DEF "Dictionar DTH-FR" nest
+GET_BOOK "Dictionar DTH-FR"
+ADD_DEF "Dictionar DTH-FR" poised divergent
+ADD_DEF "Dictionar DTH-FR" joyous uppity
+GET_BOOK "Dictionar DTH-FR"
+RMV_DEF "Dictionar DTH-FR" fowl
+BORROW Jeremiah "Dictionar DTH-FR" 10
+ADD_BOOK "Dictionar IND-KR" 17
+haircut cruel
+event camera
+encouraging fang
+habitual worried
+mice drum
+honorable geese
+surround notice
+fresh roomy
+shiny stretch
+lethal incandescent
+bang jeans
+ruddy rake
+ski thank
+tremendous shaky
+basket jumpy
+spotty mist
+inform sour
+RETURN Jeremiah "Dictionar DTH-FR" 13 2
+GET_BOOK "Dictionar IND-KR"
+BORROW Schmitt "Dictionar IND-KR" 5
+ADD_DEF "Dictionar IND-KR" haircut desk
+RETURN Schmitt "Dictionar IND-KR" 17 5
+BORROW Pace "Dictionar DTH-FR" 13
+GET_BOOK "Dictionar DTH-FR"
+BORROW Virginia "Dictionar IND-KR" 8
+RETURN Virginia "Dictionar IND-KR" 21 5
+ADD_USER Traver
+BORROW Jeffrey "Dictionar IND-KR" 6
+RETURN Pace "Dictionar DTH-FR" 16 2
+ADD_BOOK "Dictionar ESP-IND" 1
+mine locket
+BORROW Alison "Dictionar DTH-FR" 21
+RETURN Jeffrey "Dictionar IND-KR" 3 3
+RETURN Alison "Dictionar DTH-FR" 23 3
+BORROW Cappetta "Dictionar DTH-FR" 19
+BORROW Alison "Dictionar IND-KR" 8
+RETURN Cappetta "Dictionar DTH-FR" 13 2
+ADD_DEF "Dictionar IND-KR" chemical paper
+BORROW Cappetta "Dictionar DTH-FR" 6
+BORROW Walls "Dictionar ESP-IND" 19
+RETURN Cappetta "Dictionar DTH-FR" 6 4
+GET_DEF "Dictionar IND-KR" ski
+RETURN Alison "Dictionar IND-KR" 8 2
+ADD_DEF "Dictionar DTH-FR" egg sack
+ADD_USER Horath
+BORROW Sparks "Dictionar DTH-FR" 21
+ADD_DEF "Lutzow + Gillam = frail" reward aware
+RMV_BOOK "Dictionar IND-KR"
+ADD_BOOK "Dictionar NOR-RUS" 9
+deadpan hilarious
+stone calculate
+lake basketball
+amusement quiet
+voyage remarkable
+destruction food
+rule fetch
+way school
+plant ready
+BORROW Jeremiah "Dictionar NOR-RUS" 16
+RETURN Sparks "Dictionar DTH-FR" 17 5
+BORROW Horath "Dictionar DTH-FR" 13
+ADD_USER Badgley
+RETURN Jeremiah "Dictionar NOR-RUS" 14 1
+RETURN Walls "Dictionar ESP-IND" 20 3
+GET_BOOK "Dictionar DTH-FR"
+ADD_BOOK "Dictionar TR-CHN" 22
+ill-informed own
+truck system
+gainful married
+belligerent reject
+blade oil
+thoughtful gainful
+sweater dislike
+public abounding
+tip accurate
+sparkling green
+amusement anxious
+eminent zany
+steam tree
+gabby chin
+curious limit
+direction scribble
+rifle fretful
+fantastic parched
+base hungry
+belief few
+fall wide-eyed
+scarce ladybug
+GET_DEF "Dictionar ESP-IND" pick
+ADD_USER Mueller
+BORROW Badgley "Dictionar NOR-RUS" 6
+GET_BOOK "Dictionar DTH-FR"
+RETURN Horath "Dictionar DTH-FR" 3 1
+ADD_USER Dana
+ADD_DEF "Walter + Rial = sofa" guard shelter
+BORROW Sparks "Dictionar TR-CHN" 5
+RETURN Badgley "Dictionar NOR-RUS" 18 5
+RETURN Sparks "Dictionar TR-CHN" 2 3
+GET_DEF "Dictionar ESP-IND" mine
+BORROW Cappetta "Dictionar NOR-RUS" 22
+ADD_USER Hollis
+GET_DEF "Dictionar ESP-IND" mine
+BORROW Virginia "Dictionar ESP-IND" 23
+RETURN Virginia "Dictionar ESP-IND" 20 4
+BORROW Christian "Dictionar ESP-IND" 23
+RETURN Cappetta "Dictionar NOR-RUS" 15 2
+GET_BOOK "Dictionar NOR-RUS"
+RETURN Christian "Dictionar ESP-IND" 23 1
+BORROW Virginia "Dictionar TR-CHN" 20
+RETURN Virginia "Dictionar TR-CHN" 2 5
+BORROW Jeremiah "Dictionar DTH-FR" 11
+BORROW Pace "Dictionar TR-CHN" 14
+BORROW Christian "Dictionar ESP-IND" 0
+RETURN Pace "Dictionar TR-CHN" 6 4
+GET_BOOK "Dictionar NOR-RUS"
+RMV_DEF "Dictionar NOR-RUS" stone
+ADD_DEF "Dictionar NOR-RUS" adaptable maid
+ADD_DEF "Dictionar NOR-RUS" amusement knit
+RETURN Jeremiah "Dictionar DTH-FR" 13 2
+GET_BOOK "Dictionar TR-CHN"
+BORROW Dana "Dictionar NOR-RUS" 23
+RETURN Dana "Dictionar NOR-RUS" 23 1
+LOST Christian "Dictionar ESP-IND"
+ADD_USER Goetzinger
+GET_BOOK "Dictionar JPN-DTH"
+BORROW Sparks "Dictionar DTH-FR" 14
+RETURN Sparks "Dictionar DTH-FR" 0 5
+ADD_DEF "Dictionar NOR-RUS" train shivering
+ADD_USER Hollis
+GET_DEF "Dictionar TR-CHN" belief
+ADD_DEF "Dictionar TR-HNG" connection pump
+BORROW Jeremiah "Dictionar TR-CHN" 14
+BORROW Horath "Dictionar NOR-RUS" 1
+RETURN Jeremiah "Dictionar TR-CHN" 20 1
+BORROW Badgley "Dictionar DTH-FR" 1
+RMV_DEF "Dictionar DTH-FR" aromatic
+RETURN Badgley "Dictionar DTH-FR" 23 5
+ADD_BOOK "Dictionar FR-ESP" 17
+typical ski
+neck deserted
+control sort
+noiseless dead
+pretend muddle
+volatile skillful
+sweater enthusiastic
+unpack magic
+cautious store
+ear present
+memorize peaceful
+condition vengeful
+hard-to-find pastoral
+brash serve
+object equal
+watch lively
+cemetery zephyr
+ADD_BOOK "Dictionar RO-POR" 19
+detail garrulous
+shave church
+baby hesitant
+wobble explain
+attractive woebegone
+instruct faulty
+impulse impulse
+profit fast
+groan halting
+frail insect
+satisfying hesitant
+story stick
+oatmeal adventurous
+imminent dashing
+pour threatening
+fog garrulous
+assorted picture
+partner perpetual
+numberless wink
+ADD_BOOK "Dictionar FR-RUS" 4
+acceptable brother
+stay hobbies
+bleach soothe
+squeak pail
+ADD_DEF "Dictionar FR-RUS" wobble funny
+ADD_USER Zita
+BORROW Traver "Dictionar TR-CHN" 5
+RETURN Horath "Dictionar NOR-RUS" 20 4
+LOST Traver "Dictionar TR-CHN"
+ADD_BOOK "Dictionar NOR-ESP" 0
+BORROW Jeremiah "Dictionar NOR-ESP" 5
+ADD_BOOK "Dictionar HIN-RO" 10
+plastic blushing
+arm spiteful
+caring bed
+sassy influence
+staking cast
+motion spurious
+prepare bruise
+buzz argue
+malicious probable
+wrestle waste
+ADD_DEF "Dictionar FR-ESP" condition color
+BORROW Schmitt "Dictionar NOR-RUS" 7
+BORROW Zita "Dictionar HIN-RO" 19
+RETURN Zita "Dictionar HIN-RO" 15 3
+BORROW Dana "Dictionar FR-RUS" 0
+RMV_BOOK "Dictionar DTH-FR"
+BORROW Zita "Dictionar RO-POR" 23
+ADD_DEF "Dictionar HIN-RO" prepare abnormal
+RETURN Jeremiah "Dictionar NOR-ESP" 21 3
+RETURN Schmitt "Dictionar NOR-RUS" 19 3
+ADD_BOOK "Dictionar ESP-KR" 1
+guttural ultra
+BORROW Jeremiah "Dictionar NOR-RUS" 8
+BORROW Virginia "Dictionar NOR-ESP" 16
+BORROW Pace "Dictionar FR-ESP" 14
+ADD_DEF "Dictionar FR-ESP" profuse mess-up
+RETURN Zita "Dictionar RO-POR" 16 2
+GET_DEF "Dictionar FR-RUS" bleach
+ADD_BOOK "Dictionar IT-RUS" 7
+highfalutin toothpaste
+leg walk
+wonderful color
+hobbies cough
+tightfisted subsequent
+striped chubby
+nut satisfy
+GET_BOOK "Dictionar NOR-RUS"
+BORROW Hollis "Dictionar ESP-KR" 5
+BORROW Schmitt "Dictionar RO-POR" 7
+BORROW Mueller "Dictionar IT-RUS" 4
+BORROW Walls "Dictionar HIN-RO" 10
+RETURN Schmitt "Dictionar RO-POR" 8 5
+GET_BOOK "Dictionar FR-ESP"
+BORROW Goetzinger "Dictionar RO-POR" 19
+RETURN Mueller "Dictionar IT-RUS" 16 1
+ADD_USER Christian
+ADD_DEF "Dictionar HIN-RO" juicy melted
+BORROW Jeffrey "Dictionar IT-RUS" 4
+RETURN Jeremiah "Dictionar NOR-RUS" 12 1
+RETURN Virginia "Dictionar NOR-ESP" 16 2
+ADD_BOOK "Dictionar RO-AR" 17
+time didactic
+cooing special
+staking smell
+account unable
+claim spill
+calm care
+witty inconclusive
+theory substantial
+play motion
+knot tawdry
+buzz blot
+plastic title
+lame agree
+attack blink
+competition lyrical
+growth price
+earn physical
+ADD_DEF "Dictionar RO-AR" wander stare
+BORROW Zita "Dictionar NOR-ESP" 9
+RETURN Jeffrey "Dictionar IT-RUS" 4 2
+ADD_DEF "Dictionar ESP-KR" entertaining witty
+RETURN Goetzinger "Dictionar RO-POR" 21 2
+GET_DEF "Dictionar FR-ESP" condition
+ADD_USER Floyd
+RETURN Hollis "Dictionar ESP-KR" 18 1
+RETURN Walls "Dictionar HIN-RO" 12 3
+RETURN Dana "Dictionar FR-RUS" 13 1
+GET_DEF "Dictionar RO-AR" witty
+BORROW Christian "Dictionar ESP-KR" 7
+ADD_DEF "Dictionar ESP-KR" spotted male
+RETURN Christian "Dictionar ESP-KR" 18 1
+BORROW Jeremiah "Dictionar RO-POR" 7
+ADD_DEF "Dictionar IT-RUS" vacation numberless
+RETURN Jeremiah "Dictionar RO-POR" 23 3
+GET_BOOK "Dictionar HIN-RO"
+BORROW Badgley "Dictionar ESP-KR" 11
+RETURN Zita "Dictionar NOR-ESP" 2 5
+RETURN Badgley "Dictionar ESP-KR" 19 4
+GET_DEF "Dictionar HIN-RO" buzz
+BORROW Dana "Dictionar NOR-RUS" 9
+BORROW Zita "Dictionar HIN-RO" 16
+RETURN Dana "Dictionar NOR-RUS" 7 2
+RMV_BOOK "Dictionar IT-RUS"
+RETURN Pace "Dictionar FR-ESP" 18 5
+RMV_BOOK "Dictionar FR-RUS"
+BORROW Christian "Dictionar FR-ESP" 0
+ADD_DEF "Dictionar ESP-KR" entertaining harmony
+BORROW Badgley "Dictionar NOR-ESP" 23
+ADD_USER Nemeroff
+RETURN Badgley "Dictionar NOR-ESP" 23 2
+RETURN Christian "Dictionar FR-ESP" 7 3
+BORROW Goetzinger "Dictionar NOR-ESP" 12
+LOST Goetzinger "Dictionar NOR-ESP"
+GET_DEF "Dictionar NOR-RUS" lake
+RETURN Zita "Dictionar HIN-RO" 15 5
+RMV_BOOK "Dictionar NOR-RUS"
+GET_DEF "Dictionar FR-ESP" scared
+GET_BOOK "Dictionar HIN-RO"
+GET_BOOK "Dictionar FR-ESP"
+ADD_BOOK "Dictionar KR-FR" 16
+alcoholic honey
+fasten seemly
+ball wiggly
+explain fertile
+cover work
+scatter bulb
+previous clover
+natural stretch
+harm bury
+chew kitty
+window ambiguous
+tenuous aftermath
+soak dinner
+ambiguous aboriginal
+moon blade
+night adventurous
+RETURN Christian "Dictionar KR-FR" 14 5
+BORROW Perez "Dictionar NOR-GR" 11
+BORROW Goetzinger "Dictionar HIN-RO" 4
+ADD_DEF "Dictionar ESP-KR" present lunchroom
+RETURN Goetzinger "Dictionar HIN-RO" 17 3
+ADD_DEF "Dictionar RO-AR" arrest changeable
+BORROW Christian "Dictionar RO-AR" 12
+BORROW Virginia "Dictionar HIN-RO" 10
+ADD_BOOK "Dictionar HIN-CHN" 7
+post didactic
+needle omniscient
+crooked fuel
+cast level
+cub wail
+solid rebel
+doubtful spectacular
+BORROW Nemeroff "Dictionar FR-ESP" 5
+GET_DEF "Dictionar RO-POR" imminent
+ADD_USER Cavanna
+BORROW Badgley "Dictionar ESP-KR" 3
+RETURN Badgley "Dictionar ESP-KR" 10 4
+RETURN Nemeroff "Dictionar FR-ESP" 9 4
+ADD_DEF "Dictionar ESP-KR" describe decide
+BORROW Dana "Dictionar ESP-KR" 22
+ADD_USER Villanueva
+ADD_DEF "Dictionar ESP-KR" homely top
+RETURN Dana "Dictionar ESP-KR" 17 1
+RETURN Virginia "Dictionar HIN-RO" 22 5
+GET_DEF "Dictionar HIN-RO" motion
+ADD_DEF "Dictionar ESP-KR" fill deadpan
+ADD_BOOK "Dictionar CHN-KR" 2
+smell thirsty
+coach spoil
+ADD_BOOK "Dictionar GR-IND" 21
+thin dynamic
+parallel annoy
+gather absurd
+notebook pie
+duck food
+true temporary
+board absorbing
+cumbersome hall
+fowl foot
+unique eye
+baseball memory
+fact crook
+produce concerned
+joke tested
+humorous impolite
+sad humdrum
+swift taboo
+wood exist
+calendar quickest
+confess fair
+brake hellish
+BORROW Schmitt "Dictionar HIN-CHN" 7
+GET_BOOK "Dictionar HIN-CHN"
+BORROW Mueller "Dictionar RO-POR" 15
+LOST Schmitt "Dictionar HIN-CHN"
+ADD_USER Carie
+GET_BOOK "Dictionar RO-POR"
+RETURN Mueller "Dictionar RO-POR" 3 2
+BORROW Carie "Dictionar ESP-KR" 9
+BORROW Villanueva "Dictionar KR-FR" 16
+RETURN Christian "Dictionar HIN-RO" 8 5
+RETURN Villanueva "Dictionar KR-FR" 3 1
+ADD_DEF "Dictionar FR-ESP" object absent
+GET_BOOK "Dictionar RO-AR"
+GET_DEF "Dictionar RUS-RO" sidewalk
+BORROW Jeremiah "Dictionar HIN-RO" 8
+RETURN Carie "Dictionar ESP-KR" 11 3
+BORROW Zita "Dictionar RO-AR" 11
+BORROW Villanueva "Dictionar GR-IND" 16
+RETURN Christian "Dictionar FR-ESP" 23 5
+ADD_DEF "Dictionar RO-POR" wipe lumber
+RMV_DEF "Dictionar ESP-KR" homely
+GET_DEF "Dictionar RO-AR" calm
+RETURN Zita "Dictionar RO-AR" 0 2
+RETURN Villanueva "Dictionar GR-IND" 2 3
+BORROW Traver "Dictionar FR-ESP" 4
+RETURN Traver "Dictionar FR-ESP" 8 3
+GET_BOOK "Dictionar RO-POR"
+BORROW Horath "Dictionar ESP-KR" 5
+ADD_BOOK "Dictionar IT-AR" 18
+invincible sort
+legal brawny
+abounding order
+frantic empty
+tacky kitty
+disagreeable compete
+bore secret
+gruesome puffy
+zoom scared
+fork race
+little two
+snakes well-made
+functional rainy
+painstaking free
+accurate food
+behavior macho
+route accurate
+ball glow
+RETURN Horath "Dictionar ESP-KR" 1 1
+BORROW Traver "Dictionar RO-POR" 23
+RETURN Traver "Dictionar RO-POR" 4 3
+BORROW Goetzinger "Dictionar KR-FR" 7
+BORROW Hollis "Dictionar FR-ESP" 21
+RETURN Goetzinger "Dictionar KR-FR" 1 1
+GET_BOOK "Andeee + Rosales = flag"
+RETURN Jeremiah "Dictionar HIN-RO" 14 2
+ADD_DEF "Dictionar CHN-KR" gaping damaging
+ADD_DEF "Dictionar IT-AR" spot sign
+RETURN Hollis "Dictionar FR-ESP" 18 4
+BORROW Pace "Dictionar RO-POR" 14
+ADD_BOOK "Dictionar NOR-IT" 11
+promise suggestion
+present psychedelic
+bare heartbreaking
+confuse swing
+north record
+attack badge
+clammy measure
+romantic rhetorical
+afterthought limit
+careless blue
+cellar debonair
+RETURN Pace "Dictionar RO-POR" 18 1
+BORROW Alison "Dictionar FR-ESP" 9
+GET_BOOK "Dictionar NOR-IT"
+ADD_USER Ruch
+ADD_DEF "Dictionar ESP-KR" cheerful whole
+ADD_USER Asbury
+GET_DEF "Dictionar FR-ESP" ear
+RETURN Alison "Dictionar FR-ESP" 14 4
+GET_BOOK "Dictionar KR-FR"
+BORROW Walls "Dictionar RO-POR" 15
+BORROW Floyd "Dictionar NOR-IT" 4
+RETURN Walls "Dictionar RO-POR" 13 1
+BORROW Sparks "Dictionar FR-ESP" 9
+ADD_DEF "Dictionar RO-AR" joyous tow
+ADD_BOOK "Dictionar RUS-TR" 14
+glove fresh
+pointless airplane
+faithful guiltless
+sort film
+design skirt
+kiss four
+physical stain
+brave surround
+snatch expensive
+steer son
+descriptive annoying
+lewd whirl
+cruel theory
+yarn narrow
+BORROW Schmitt "Dictionar GR-IND" 14
+ADD_BOOK "Dictionar IND-FR" 4
+fortunate silly
+feeling ocean
+right uneven
+trucks frail
+GET_BOOK "Dictionar RUS-TR"
+GET_DEF "Dictionar IT-AR" snakes
+RETURN Schmitt "Dictionar GR-IND" 11 4
+RETURN Floyd "Dictionar NOR-IT" 17 5
+RETURN Sparks "Dictionar FR-ESP" 8 3
+BORROW Carie "Dictionar IT-AR" 23
+RETURN Carie "Dictionar IT-AR" 14 3
+ADD_DEF "Dictionar IT-AR" advise cake
+GET_BOOK "Dictionar CHN-KR"
+ADD_DEF "Dictionar RO-AR" play lunchroom
+GET_DEF "Dictionar FR-ESP" bizarre
+ADD_USER Thiess
+GET_DEF "Dictionar RO-POR" imminent
+ADD_DEF "Dictionar RUS-TR" glove enchanting
+BORROW Ruch "Dictionar RUS-TR" 1
+RETURN Ruch "Dictionar RUS-TR" 10 1
+BORROW Schmitt "Dictionar CHN-KR" 0
+GET_DEF "Dictionar ESP-KR" guttural
+RETURN Schmitt "Dictionar CHN-KR" 19 5
+BORROW Walls "Dictionar IND-FR" 20
+BORROW Zita "Dictionar NOR-IT" 17
+RETURN Zita "Dictionar NOR-IT" 19 5
+ADD_DEF "Dictionar ESP-KR" medical top
+BORROW Hollis "Dictionar RO-POR" 21
+RETURN Hollis "Dictionar RO-POR" 15 4
+ADD_DEF "Dictionar HIN-RO" juicy boiling
+BORROW Sparks "Dictionar CHN-KR" 20
+RETURN Walls "Dictionar IND-FR" 8 3
+ADD_DEF "Dictionar HIN-RO" needless offbeat
+GET_BOOK "Dictionar IT-AR"
+BORROW Virginia "Dictionar IND-FR" 22
+GET_BOOK "Dictionar KR-FR"
+RETURN Sparks "Dictionar CHN-KR" 13 5
+RETURN Virginia "Dictionar IND-FR" 3 3
+ADD_USER Ruch
+GET_DEF "Dictionar FR-ESP" classy
+GET_BOOK "Dictionar CHN-KR"
+GET_DEF "Dictionar HNG-RO" mysterious
+BORROW Goetzinger "Dictionar RO-AR" 14
+BORROW Pace "Dictionar CHN-KR" 17
+BORROW Eckard "Dictionar HNG-KR" 3
+ADD_USER Duffey
+RETURN Pace "Dictionar CHN-KR" 23 3
+BORROW Jeffrey "Dictionar NOR-IT" 5
+RETURN Goetzinger "Dictionar RO-AR" 9 3
+ADD_DEF "Dictionar TR-HNG" tomatoes juice
+ADD_DEF "Dictionar FR-ESP" remain spy
+RETURN Jeffrey "Dictionar NOR-IT" 19 5
+BORROW Cappetta "Dictionar HIN-RO" 0
+BORROW Jeffrey "Dictionar IND-FR" 21
+RETURN Cappetta "Dictionar HIN-RO" 12 1
+BORROW Hollis "Dictionar KR-FR" 13
+RETURN Jeffrey "Dictionar IND-FR" 9 3
+BORROW Thiess "Dictionar ESP-KR" 9
+ADD_USER Badgley
+GET_BOOK "Dictionar FR-ESP"
+ADD_BOOK "Dictionar EN-GR" 23
+grip disagreeable
+wound tickle
+fragile four
+colorful bounce
+geese son
+pumped paltry
+geese middle
+start able
+futuristic deserve
+downtown noisy
+earthy baseball
+harass awful
+greasy love
+appliance concern
+makeshift nondescript
+dog jittery
+enormous mug
+pause obey
+fool present
+separate head
+uptight hateful
+act electric
+whirl null
+BORROW Mueller "Dictionar EN-GR" 13
+GET_BOOK "Dictionar ESP-KR"
+RETURN Thiess "Dictionar ESP-KR" 6 1
+RETURN Mueller "Dictionar EN-GR" 9 5
+RETURN Hollis "Dictionar KR-FR" 9 1
+BORROW Alison "Dictionar EN-GR" 0
+RETURN Alison "Dictionar EN-GR" 3 5
+ADD_BOOK "Dictionar EN-ESP" 18
+measly mammoth
+tomatoes support
+price colour
+owe comb
+zinc load
+scattered governor
+malicious drain
+alluring trees
+gaping brief
+paltry bruise
+raspy fall
+previous exclusive
+return structure
+literate range
+nose bathe
+camera scandalous
+run battle
+spectacular six
+GET_BOOK "Dictionar IND-FR"
+GET_BOOK "Dictionar ESP-KR"
+ADD_DEF "Dictionar IT-AR" ball jumbled
+ADD_DEF "Dictionar FR-ESP" bath hurt
+ADD_DEF "Dictionar IT-AR" conscious minister
+GET_DEF "Dictionar CHN-KR" downtown
+BORROW Sparks "Dictionar FR-ESP" 10
+ADD_DEF "Dictionar EN-CHN" preach spell
+RETURN Sparks "Dictionar FR-ESP" 12 3
+GET_BOOK "Tamra + Kaitlyn = playground"
+BORROW Traver "Dictionar NOR-IT" 15
+GET_BOOK "Dictionar GR-IND"
+RMV_DEF "Dictionar FR-ESP" object
+RETURN Traver "Dictionar NOR-IT" 18 1
+ADD_USER Cybel
+BORROW Asbury "Dictionar HIN-RO" 2
+RETURN Asbury "Dictionar HIN-RO" 17 5
+BORROW Badgley "Dictionar RO-AR" 23
+RETURN Badgley "Dictionar RO-AR" 6 3
+GET_DEF "Dictionar GR-IND" humorous
+RMV_DEF "Dictionar EN-GR" geese
+ADD_BOOK "Dictionar JPN-POR" 8
+ants loose
+hushed acrid
+song circle
+absent pocket
+ajar supreme
+gaudy shiny
+dry unsuitable
+disarm wrong
+BORROW Walls "Dictionar IND-FR" 23
+BORROW Hollis "Dictionar RO-AR" 16
+GET_BOOK "Dictionar HIN-RO"
+BORROW Badgley "Dictionar RO-POR" 15
+BORROW Goetzinger "Dictionar EN-ESP" 2
+ADD_DEF "Dictionar EN-ESP" puny beef
+RETURN Walls "Dictionar IND-FR" 2 1
+RMV_BOOK "Dictionar GR-IND"
+GET_DEF "Dictionar EN-GR" separate
+RETURN Badgley "Dictionar RO-POR" 22 4
+LOST Goetzinger "Dictionar EN-ESP"
+ADD_BOOK "Dictionar CHN-RUS" 0
+RETURN Hollis "Dictionar RO-AR" 17 2
+RMV_BOOK "Dictionar FR-ESP"
+ADD_DEF "Dictionar HIN-RO" fine aberrant
+GET_DEF "Dictionar CHN-KR" smell
+GET_BOOK "Dictionar JPN-POR"
+GET_BOOK "Dictionar ESP-KR"
+ADD_BOOK "Dictionar DTH-EN" 21
+advise agree
+push side
+illegal suit
+flag receipt
+meat live
+swing sprout
+observant polite
+suggest piquant
+scintillating obeisant
+feeble itchy
+land silver
+list fog
+girl quarter
+crime knowledge
+sedate flawless
+annoying art
+deafening fragile
+general plucky
+grate damp
+cake guitar
+picayune stone
+ADD_BOOK "Dictionar GR-IT" 11
+spotted sweltering
+lean glossy
+natural receive
+watery size
+zany quartz
+scribble knock
+leather flowers
+uncle maniacal
+unit activity
+military exultant
+rainstorm work
+ADD_BOOK "Dictionar AR-RO" 21
+stem moor
+can nifty
+scrub bent
+hurried dogs
+plug harmony
+tasteless complex
+living delicious
+carry educated
+whine free
+glossy box
+wrap glass
+direful red
+null scintillating
+branch feeling
+acoustic glove
+overconfident overt
+attractive zippy
+free dislike
+behavior song
+amused coil
+chickens produce
+ADD_DEF "Dictionar DTH-EN" picayune creepy
+BORROW Mueller "Dictionar DTH-EN" 2
+BORROW Zita "Dictionar NOR-IT" 18
+ADD_BOOK "Dictionar IND-IT" 1
+pretend cheerful
+GET_BOOK "Dictionar CHN-RUS"
+ADD_BOOK "Dictionar GR-TR" 12
+consist swanky
+celery youthful
+woozy yard
+excited inject
+three border
+happy strange
+throne concerned
+bait deadpan
+scrape cow
+panoramic friend
+acoustics delightful
+girl pickle
+LOST Zita "Dictionar NOR-IT"
+ADD_DEF "Dictionar GR-IND" mundane power
+BORROW Traver "Dictionar IND-IT" 21
+RETURN Mueller "Dictionar DTH-EN" 0 3
+RETURN Traver "Dictionar IND-IT" 17 4
+GET_BOOK "Dictionar RUS-TR"
+BORROW Mueller "Dictionar HIN-RO" 21
+RETURN Mueller "Dictionar HIN-RO" 3 3
+BORROW Traver "Dictionar IND-FR" 13
+GET_BOOK "Dictionar RO-POR"
+ADD_DEF "Dictionar IND-FR" bewildered committee
+BORROW Carie "Dictionar JPN-POR" 13
+RETURN Carie "Dictionar JPN-POR" 9 5
+RETURN Traver "Dictionar IND-FR" 10 5
+BORROW Alison "Dictionar RO-POR" 12
+GET_BOOK "Dictionar GR-IT"
+LOST Alison "Dictionar RO-POR"
+ADD_DEF "Dictionar KR-FR" previous existence
+BORROW Carie "Dictionar EN-GR" 16
+RETURN Carie "Dictionar EN-GR" 6 5
+BORROW Mueller "Dictionar AR-RO" 19
+BORROW Duffey "Dictionar EN-AR" 22
+RETURN Mueller "Dictionar AR-RO" 6 5
+BORROW Hollis "Dictionar AR-RO" 20
+ADD_BOOK "Dictionar POR-IND" 9
+face loss
+activity furniture
+kick cart
+close heady
+befitting frightening
+thoughtless terrific
+promise cold
+knock typical
+grey disastrous
+ADD_USER Wolfe
+RETURN Hollis "Dictionar AR-RO" 23 5
+BORROW Jeffrey "Dictionar KR-FR" 21
+BORROW Ruch "Dictionar GR-TR" 11
+RETURN Jeffrey "Dictionar KR-FR" 10 3
+RETURN Ruch "Dictionar GR-TR" 9 4
+BORROW Horath "Dictionar IND-FR" 14
+GET_BOOK "Dictionar AR-RO"
+BORROW Nemeroff "Dictionar RUS-TR" 3
+LOST Horath "Dictionar IND-FR"
+RETURN Nemeroff "Dictionar RUS-TR" 3 5
+GET_DEF "Dictionar HIN-RO" prepare
+ADD_USER Keats
+ADD_BOOK "Dictionar RO-CHN" 1
+grotesque disturbed
+GET_BOOK "Dictionar GR-TR"
+ADD_USER Cappetta
+ADD_USER Corey
+EXIT
