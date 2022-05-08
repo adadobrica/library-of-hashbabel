@@ -202,7 +202,7 @@ hash_function_string(void *a)
 	/*
 	 * Credits: http://www.cse.yorku.ca/~oz/hash.html
 	 */
-	char *p = a;
+	/*char *p = a;
 	unsigned long hash = 5381;
 	int c;
 
@@ -213,6 +213,15 @@ hash_function_string(void *a)
 	}
 	//hash = abs(hash);
 	return hash & ~(1 << 31);
+	*/
+	unsigned char *puchar_a = (unsigned char *)a;
+	unsigned int hash = 5381;
+	int c;
+
+	while ((c = *puchar_a++))
+		hash = (( hash << 5u) + hash) + c;
+
+	return hash;
 }
 
 hashtable_t *
@@ -259,13 +268,6 @@ ht_get(hashtable_t *ht, void *key)
 	node_t *current = bucket->head;
 	info *new_data = (info *)current->data;
 
-	/*while (ht->compare_function(key, new_data->key) != 0) {
-		if (current != NULL) {
-        	current = current->next;
-        	new_data = (info *)current->data;
-        }
-	}
-	*/
 	while (current) {
 		if (ht->compare_function(key, new_data->key) != 0) {
 			current = current->next;
@@ -284,7 +286,6 @@ ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 	int index;
 	index = ht->hash_function(key) % ht->hmax;
 	info *new_data = malloc(sizeof(info));
-	int found = 0;
 
 	node_t *current = ht->buckets[index]->head;
 	while (current) {
@@ -293,7 +294,6 @@ ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 			void *tmp = realloc(data->value, value_size);
 			data->value = tmp;
 			memcpy(data->value, value, value_size);
-			found = 1;
 			free(new_data);
 			return;
 		}
@@ -319,13 +319,6 @@ ht_remove_entry(hashtable_t *ht, void *key)
 	if (ht_has_key(ht, key) == 0) {
 		return;
 	}
-	/*while (ht->compare_function(key, new_data->key)) {
-		cnt++;
-		if (current) {
-		 current = current->next;
-		}
-	}
-	*/
 	while (current) {
 		if (ht->compare_function(key, new_data->key)) {
 			cnt++;
@@ -544,9 +537,9 @@ void print_top_users(hashtable_t *users) {
 	}
 }
 
-void get_book_name(char book_name[MAX_BOOK_LEN]) {
+void get_book_name(char book_name[MAX_STRING_SIZE]) {
 	int valid = 0, len = 0;
-	char buff[MAX_BOOK_LEN], *ch = " ";
+	char buff[MAX_STRING_SIZE] = {0}, *ch = " ";
 	while (valid == 0) {
 		scanf("%s", buff);
 		if (buff[strlen(buff) - 1] == '\"') {
@@ -554,7 +547,7 @@ void get_book_name(char book_name[MAX_BOOK_LEN]) {
 		}
 		memmove(book_name + len, buff, strlen(buff) + 1);
 		len += strlen(buff);
-		memmove(book_name + len, ch, sizeof(char *));
+		memmove(book_name + len, ch, strlen(ch) + 1);
 		len++;
 	}
 }
@@ -614,12 +607,6 @@ void ADD_BOOK(hashtable_t **library, book_t new_book) {
 void GET_BOOK(hashtable_t *library) {
 	char book_name[MAX_BOOK_LEN], garbage;
 	scanf("%c", &garbage);
-	//fgets(book_name, MAX_BOOK_LEN - 1, stdin);
-	//char *rest = book_name;
-	//char *ptr = strtok_r(rest, "\"", &rest);
-	//char *rest = book_name;
-	//char *ptr = strtok_r(rest, "\"", &rest);
-	//printf("%s", ptr);
 	get_book_name(book_name);
 	if (ht_has_key(library, book_name) == 0) {
 		printf("%s", BOOK_NOT_FOUND);
