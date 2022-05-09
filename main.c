@@ -3,9 +3,9 @@
 #include <string.h>
 #include <math.h>
 
-#define HMAX_LIBRARY 1
-#define HMAX_USERS 1
-#define HMAX_BOOKS 1
+#define HMAX_LIBRARY 10
+#define HMAX_USERS 10
+#define HMAX_BOOKS 10
 #define MAX_BOOK_LEN 40
 #define MAX_STRING_SIZE 256
 #define MAX_DEF_LEN 20
@@ -46,12 +46,6 @@ struct hashtable_t {
 	unsigned int (*hash_function)(void*);
 	int (*compare_function)(void*, void*);
 };
-
-
-typedef struct def_t {
-	char def_key[MAX_DEF_LEN];
-	char def_val[MAX_DEF_LEN];
-} def_t;
 
 typedef struct user_t {
 	char user_name[MAX_DEF_LEN];
@@ -117,7 +111,7 @@ void add_nth_node(ll_t *list, int n, const void *value) {
 
     new_node = malloc(sizeof(*new_node));
     new_node->data = malloc(list->data_size);
-    memcpy(new_node->data, value, list->data_size);
+    memmove(new_node->data, value, list->data_size);
 
     new_node->next = curr;
 
@@ -264,7 +258,7 @@ ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 		if (ht->compare_function(key, data->key) == 0) {
 			void *tmp = realloc(data->value, value_size);
 			data->value = tmp;
-			memcpy(data->value, value, value_size);
+			memmove(data->value, value, value_size);
 			free(new_data);
 			return;
 		}
@@ -272,8 +266,8 @@ ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 	}
 	new_data->key = malloc(key_size);
 	new_data->value = malloc(value_size);
-	memcpy(new_data->key, key, key_size);
-	memcpy(new_data->value, value, value_size);
+	memmove(new_data->key, key, key_size);
+	memmove(new_data->value, value, value_size);
 	add_nth_node(ht->buckets[index], 0, new_data);
 	free(new_data);
 	ht->size++;
@@ -294,11 +288,15 @@ ht_remove_entry(hashtable_t *ht, void *key)
 		if (ht->compare_function(key, new_data->key)) {
 			cnt++;
 			current = current->next;
+			new_data = (info *)current->data;
 		} else {
 			break;
 		}
 	}
+
 	current = remove_nth_node(bucket, cnt);
+	if (!bucket->size)
+		bucket->head = NULL;
 	info *data = (info *)current->data;
 	free(data->value);
 	free(data->key);
@@ -353,17 +351,17 @@ void RESIZE_HASHTABLE(hashtable_t **ht, int type) {
 	hashtable_t *new_ht = ht_create(new_size, hash_function_string, compare_function_strings);
 	for (int i = 0; i < (*ht)->hmax; i++) {
 		node_t *current = (*ht)->buckets[i]->head, *prev;
-		while (current) {
+		while (current != NULL) {
             prev = current;
 			info *data = (info *)current->data;
-            int key_size = strlen((char *)data->key) + 1;
-			if (type == 1) {
-				book_t *b = (book_t *)ht_get(*ht, (char *)data->key);
-				RESIZE_HASHTABLE(&b->book, 1);
-			} else if (type == 2) {
+            int key_size = strlen((char *)data->key) + 1, value_size = 0;
+			if (type == 1) { // definitii
+				char *value = (char *)data->value;
+				value_size = strlen(value) + 1;
+			} else if (type == 2) { // carti
+				value_size = sizeof(book_t);
+			} else if (type == 3) { // useri
 				value_size = sizeof(user_t);
-			} else if (type == 3) {
-				value_size = sizeof(hashtable_t);
 			}
 			ht_put(new_ht, data->key, key_size, data->value, value_size);
             free(data->key);
@@ -473,7 +471,7 @@ void print_top_users(hashtable_t *users) {
 
 			//char *rest = user_data->user_name;
 			//char *ptr = strtok_r(rest, "\"", &rest);
-			memcpy(top_user_name[n_size++], user_data->user_name, strlen(user_data->user_name) + 1);
+			memmove(top_user_name[n_size++], user_data->user_name, strlen(user_data->user_name) + 1);
 			top_user_points[p_size++] = user_data->points;
 			current = current->next;
 		}
@@ -487,15 +485,15 @@ void print_top_users(hashtable_t *users) {
 				top_user_points[j] = aux_i;
 
 				char aux_c[MAX_DEF_LEN];
-				memcpy(aux_c, top_user_name[i], strlen(top_user_name[i]) + 1);
-				memcpy(top_user_name[i], top_user_name[j], strlen(top_user_name[j]) + 1);
-				memcpy(top_user_name[j], aux_c, strlen(aux_c) + 1);
+				memmove(aux_c, top_user_name[i], strlen(top_user_name[i]) + 1);
+				memmove(top_user_name[i], top_user_name[j], strlen(top_user_name[j]) + 1);
+				memmove(top_user_name[j], aux_c, strlen(aux_c) + 1);
 			} else if (top_user_points[i] == top_user_points[j]) {
 				if (strcmp(top_user_name[i], top_user_name[j]) > 0) {
 					char aux_c[MAX_DEF_LEN];
-					memcpy(aux_c, top_user_name[i], strlen(top_user_name[i]) + 1);
-					memcpy(top_user_name[i], top_user_name[j], strlen(top_user_name[j]) + 1);
-					memcpy(top_user_name[j], aux_c, strlen(aux_c) + 1);
+					memmove(aux_c, top_user_name[i], strlen(top_user_name[i]) + 1);
+					memmove(top_user_name[i], top_user_name[j], strlen(top_user_name[j]) + 1);
+					memmove(top_user_name[j], aux_c, strlen(aux_c) + 1);
 
 					//float aux_f = top_user_rating[i];
 					//top_user_rating[i] = top_user_rating[j];
@@ -530,38 +528,46 @@ void get_book_name(char book_name[MAX_STRING_SIZE]) {
 }
 		
 
-void ADD_BOOK(hashtable_t **library, book_t new_book) {
+void ADD_BOOK(hashtable_t **library, book_t *new_book) {
 	int num = 0, def_number;
 	char book_name[MAX_BOOK_LEN], garbage, line[MAX_STRING_SIZE];
-	new_book.purchases = 0;
-	new_book.rating = 0;
-	new_book.borrowed = 0;
-	new_book.book = ht_create(HMAX_BOOKS, hash_function_string, compare_function_strings);
+	new_book->purchases = 0;
+	new_book->rating = 0;
+	new_book->borrowed = 0;
+	new_book->book = ht_create(HMAX_BOOKS, hash_function_string, compare_function_strings);
 	
 	scanf("%c", &garbage);
 	get_book_name(book_name);
 	scanf("%d", &def_number);
 	//fgets(line, MAX_STRING_SIZE - 1, stdin);
 
-	memcpy(new_book.name, book_name, strlen(book_name) + 1);
+	if (ht_has_key(*library, book_name)) {
+		book_t *b = (book_t *)ht_get(*library, book_name);
+		hashtable_t *defs = (hashtable_t *)b->book;
+		ht_free(&defs, 2);
+		ht_remove_entry(*library, book_name);
+	}
+
+
+	memmove(new_book->name, book_name, strlen(book_name) + 1);
 	while (num != def_number) {
 		char key[MAX_BOOK_LEN], val[MAX_DEF_LEN];
 		scanf("%s %s", key, val);
 
-		int ok = check_for_resize(new_book.book);
+		int ok = check_for_resize(new_book->book);
 		if (ok == 1) {
-			RESIZE_HASHTABLE(&new_book.book, -1);
+			hashtable_t *defs = new_book->book;
+			RESIZE_HASHTABLE(&defs, 1);
+			new_book->book = defs;
 		}
-		ht_put(new_book.book, key, strlen(key) + 1, val, strlen(val) + 1);
+		ht_put(new_book->book, key, strlen(key) + 1, val, strlen(val) + 1);
 		num++;
 	}
 	
 	int ok = check_for_resize(*library);
-	if (ok == 1) {
-		int size = sizeof(book_t);
-		RESIZE_HASHTABLE(library, size);
-	}
-	ht_put(*library, new_book.name, strlen(new_book.name) + 1, &new_book, sizeof(book_t));
+	if (ok == 1)
+		RESIZE_HASHTABLE(library, 2);
+	ht_put(*library, new_book->name, strlen(new_book->name) + 1, new_book, sizeof(book_t));
 }
 
 void GET_BOOK(hashtable_t *library) {
@@ -602,10 +608,8 @@ void ADD_USER(hashtable_t **user) {
 		new_user.borrow = 0;
 		new_user.points = 100;
 		int ok = check_for_resize(*user);
-		if (ok == 1) {
-			int size = sizeof(user_t);
-			RESIZE_HASHTABLE(user, size);
-		}
+		if (ok == 1)
+			RESIZE_HASHTABLE(user, 3);
 		ht_put(*user, new_user.user_name, strlen(new_user.user_name) + 1, &new_user, sizeof(user_t));
 	}
 }
@@ -645,12 +649,12 @@ void BORROW_BOOK(hashtable_t **user, hashtable_t **library) {
 			book_t *b = (book_t *)ht_get(*library, book_name);
 			if (b->borrowed == 1) {
 				printf("%s", BORROWED_BOOK);
-				memcpy(u->book_name, random_value, strlen(random_value) + 1);
+				memmove(u->book_name, random_value, strlen(random_value) + 1);
 			} else if (valid == 1 && b->borrowed == 0) {
 				u->borrow = 1;
 				u->days = days_available;
 				b->borrowed = 1;
-				memcpy(u->book_name, book_name, strlen(book_name) + 1);
+				memmove(u->book_name, book_name, strlen(book_name) + 1);
 			}
 		}
 	}
@@ -666,7 +670,7 @@ void RETURN_BOOK(hashtable_t **user, hashtable_t **library) {
 	//char *book_name_string = strtok_r(NULL, "\"", &rest);
 	//char *days = strtok_r(NULL, " ", &rest);
 	//char *r = strtok_r(NULL, " ", &rest);
-	//memcpy(book_name, book_name_string, strlen(book_name_string) + 1);
+	//memmove(book_name, book_name_string, strlen(book_name_string) + 1);
 	//days_since_borrow = atoi(days);
 	//rating = atoi(r);
 
@@ -765,7 +769,7 @@ int main(void) {
 		scanf("%s", command);
 		//printf("%s\n", command);
 		if (strcmp(command, "ADD_BOOK") == 0) {
-			ADD_BOOK(&library, new_book);
+			ADD_BOOK(&library, &new_book);
 		} else if (strcmp(command, "GET_BOOK") == 0) {
 			GET_BOOK(library);
 		} else if (strcmp(command, "RMV_BOOK") == 0) {
@@ -780,8 +784,8 @@ int main(void) {
 			//char *val_string = strtok_r(NULL, " \n", &rest);
 			//char val[MAX_DEF_LEN], key[MAX_DEF_LEN];
 
-			//memcpy(val, val_string, strlen(val_string) + 1);
-			//memcpy(key, key_string, strlen(key_string) + 1);
+			//memmove(val, val_string, strlen(val_string) + 1);
+			//memmove(key, key_string, strlen(key_string) + 1);
 			scanf("%c", &garbage);
 			get_book_name(book_name);
 			scanf("%s %s", key, val);
@@ -793,7 +797,12 @@ int main(void) {
 			}
 			if (ok == 0) {
 				book_t *b = (book_t *)ht_get(library, book_name);
-				ht_put(b->book, key, strlen(key) + 1, &val, strlen(val) + 1);
+				if (check_for_resize(b->book)) {
+					hashtable_t *defs = b->book;
+					RESIZE_HASHTABLE(&defs, 1);
+					b->book = defs;
+				}
+				ht_put(b->book, key, strlen(key) + 1, val, strlen(val) + 1);
 			}
 		} else if (strcmp(command, "GET_DEF") == 0) {
 			char garbage, key[MAX_DEF_LEN];
@@ -807,7 +816,7 @@ int main(void) {
 			//char *book_name = strtok_r(NULL, "\"", &rest);
 			//char *key_string = strtok_r(NULL, " \n", &rest);
 			//char key[MAX_DEF_LEN];
-			//memcpy(key, key_string, strlen(key_string) + 1);
+			//memmove(key, key_string, strlen(key_string) + 1);
 
 			if (ht_has_key(library, book_name) == 0) {
 				printf("%s", BOOK_NOT_FOUND);
@@ -833,7 +842,7 @@ int main(void) {
 			//char *garb = strtok_r(rest, "\"", &rest);
 			//char *book_name = strtok_r(NULL, "\"", &rest);
 			//char *key_string = strtok_r(NULL, " \n", &rest);
-			//memcpy(key, key_string, strlen(key_string) + 1);
+			//memmove(key, key_string, strlen(key_string) + 1);
 
 			int ok = 0;
 			if (ht_has_key(library, book_name) == 0) {
