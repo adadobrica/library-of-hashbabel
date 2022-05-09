@@ -348,23 +348,12 @@ int check_for_resize(hashtable_t *ht) {
 
 void RESIZE_HASHTABLE(hashtable_t **ht, int type) {
 	int new_size = (*ht)->hmax * 2;
-	int value_size;
 	hashtable_t *new_ht = ht_create(new_size, hash_function_string, compare_function_strings);
 	for (int i = 0; i < (*ht)->hmax; i++) {
 		node_t *current = (*ht)->buckets[i]->head, *prev;
 		while (current != NULL) {
             prev = current;
 			info *data = (info *)current->data;
-<<<<<<< HEAD
-            int key_size = strlen((char *)data->key) + 1;
-			value_size = 0;
-			if (type == 1) {
-				value_size = strlen((char *)data->value) + 1;
-			} else if (type == 2) {
-				value_size = sizeof(user_t);
-			} else if (type == 3) {
-				value_size = sizeof(book_t);
-=======
             int key_size = strlen((char *)data->key) + 1, value_size = 0;
 			if (type == 1) { // definitii
 				char *value = (char *)data->value;
@@ -373,7 +362,6 @@ void RESIZE_HASHTABLE(hashtable_t **ht, int type) {
 				value_size = sizeof(book_t);
 			} else if (type == 3) { // useri
 				value_size = sizeof(user_t);
->>>>>>> 4f3fc356cb4f77849f311a6de4d60a31036857f3
 			}
 			ht_put(new_ht, data->key, key_size, data->value, value_size);
             free(data->key);
@@ -568,29 +556,18 @@ void ADD_BOOK(hashtable_t **library, book_t *new_book) {
 
 		int ok = check_for_resize(new_book->book);
 		if (ok == 1) {
-<<<<<<< HEAD
-			RESIZE_HASHTABLE(&new_book.book, 1);
-=======
 			hashtable_t *defs = new_book->book;
 			RESIZE_HASHTABLE(&defs, 1);
 			new_book->book = defs;
->>>>>>> 4f3fc356cb4f77849f311a6de4d60a31036857f3
 		}
 		ht_put(new_book->book, key, strlen(key) + 1, val, strlen(val) + 1);
 		num++;
 	}
 	
 	int ok = check_for_resize(*library);
-<<<<<<< HEAD
-	if (ok == 1) {
-		RESIZE_HASHTABLE(library, 3);
-	}
-	ht_put(*library, new_book.name, strlen(new_book.name) + 1, &new_book, sizeof(book_t));
-=======
 	if (ok == 1)
 		RESIZE_HASHTABLE(library, 2);
 	ht_put(*library, new_book->name, strlen(new_book->name) + 1, new_book, sizeof(book_t));
->>>>>>> 4f3fc356cb4f77849f311a6de4d60a31036857f3
 }
 
 void GET_BOOK(hashtable_t *library) {
@@ -631,14 +608,8 @@ void ADD_USER(hashtable_t **user) {
 		new_user.borrow = 0;
 		new_user.points = 100;
 		int ok = check_for_resize(*user);
-<<<<<<< HEAD
-		if (ok == 1) {
-			RESIZE_HASHTABLE(user, 2);
-		}
-=======
 		if (ok == 1)
 			RESIZE_HASHTABLE(user, 3);
->>>>>>> 4f3fc356cb4f77849f311a6de4d60a31036857f3
 		ht_put(*user, new_user.user_name, strlen(new_user.user_name) + 1, &new_user, sizeof(user_t));
 	}
 }
