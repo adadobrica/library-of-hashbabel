@@ -3,9 +3,9 @@
 #include <string.h>
 #include <math.h>
 
-#define HMAX_LIBRARY 10
-#define HMAX_USERS 10
-#define HMAX_BOOKS 10
+#define HMAX_LIBRARY 1
+#define HMAX_USERS 1
+#define HMAX_BOOKS 1
 #define MAX_BOOK_LEN 40
 #define MAX_STRING_SIZE 256
 #define MAX_DEF_LEN 20
@@ -183,37 +183,8 @@ compare_function_strings(void *a, void *b)
 }
 
 unsigned int
-hash_function_int(void *a)
-{
-	/*
-	 * Credits: https://stackoverflow.com/a/12996028/7883884
-	 */
-	unsigned int uint_a = *((unsigned int *)a);
-
-	uint_a = ((uint_a >> 16u) ^ uint_a) * 0x45d9f3b;
-	uint_a = ((uint_a >> 16u) ^ uint_a) * 0x45d9f3b;
-	uint_a = (uint_a >> 16u) ^ uint_a;
-	return uint_a;
-}
-
-unsigned int
 hash_function_string(void *a)
 {
-	/*
-	 * Credits: http://www.cse.yorku.ca/~oz/hash.html
-	 */
-	/*char *p = a;
-	unsigned long hash = 5381;
-	int c;
-
-	while (*p) {
-		hash = (((hash << 5u) + hash) + *p);
-		++p;
-	
-	}
-	//hash = abs(hash);
-	return hash & ~(1 << 31);
-	*/
 	unsigned char *puchar_a = (unsigned char *)a;
 	unsigned int hash = 5381;
 	int c;
@@ -377,7 +348,7 @@ int check_for_resize(hashtable_t *ht) {
 	return check;
 }
 
-/*void RESIZE_HASHTABLE(hashtable_t **ht, int value_size) {
+void RESIZE_HASHTABLE(hashtable_t **ht, int type) {
 	int new_size = (*ht)->hmax * 2;
 	hashtable_t *new_ht = ht_create(new_size, hash_function_string, compare_function_strings);
 	for (int i = 0; i < (*ht)->hmax; i++) {
@@ -385,9 +356,14 @@ int check_for_resize(hashtable_t *ht) {
 		while (current) {
             prev = current;
 			info *data = (info *)current->data;
-            int key_size = strlen((char *)data->key);
-			if (value_size == -1) {
-				value_size = strlen((char *)data->value);
+            int key_size = strlen((char *)data->key) + 1;
+			if (type == 1) {
+				book_t *b = (book_t *)ht_get(*ht, (char *)data->key);
+				RESIZE_HASHTABLE(&b->book, 1);
+			} else if (type == 2) {
+				value_size = sizeof(user_t);
+			} else if (type == 3) {
+				value_size = sizeof(hashtable_t);
 			}
 			ht_put(new_ht, data->key, key_size, data->value, value_size);
             free(data->key);
@@ -402,9 +378,9 @@ int check_for_resize(hashtable_t *ht) {
     free(*ht);
     *ht = new_ht;
 }
-*/
 
-void RESIZE_HASHTABLE(hashtable_t *ht) {
+
+/*void RESIZE_HASHTABLE(hashtable_t *ht) {
 	int new_size = ht->hmax * 2;
 	ll_t **new_buckets = malloc(sizeof(ll_t *) * new_size);
 
@@ -429,6 +405,7 @@ void RESIZE_HASHTABLE(hashtable_t *ht) {
 	ht->buckets = new_buckets;
 	ht->hmax = new_size;
 }
+*/
 
 void print_book(hashtable_t *library, char book_name[MAX_BOOK_LEN]) {
 	if (ht_has_key(library, book_name) == 0) {
@@ -561,24 +538,6 @@ void ADD_BOOK(hashtable_t **library, book_t new_book) {
 	new_book.borrowed = 0;
 	new_book.book = ht_create(HMAX_BOOKS, hash_function_string, compare_function_strings);
 	
-	//char line[MAX_STRING_SIZE];
-	//char garbage;
-	//fgets(line, MAX_STRING_SIZE - 1, stdin);
-	//char *rest = line;
-	//char *ptr = strtok_r(rest, "\"", &rest);
-	//memcpy(new_book.name, ptr, strlen(ptr) + 1);
-
-	//ptr = strtok_r(NULL, "\"", &rest);
-	//memcpy(number, ptr, strlen(ptr) + 1);
-	
-	//char b_name[MAX_BOOK_LEN];
-	//char *character = "\"";
-	//memcpy(b_name, character, sizeof(char *));
-	//memcpy(b_name + 1, new_book.name, strlen(new_book.name) + 1);
-	//memcpy(b_name + strlen(new_book.name) + 1, character, sizeof(char *));
-	//memcpy(new_book.name, b_name, strlen(b_name) + 1);
-	//int def_number = atoi(number);
-
 	scanf("%c", &garbage);
 	get_book_name(book_name);
 	scanf("%d", &def_number);
@@ -591,7 +550,7 @@ void ADD_BOOK(hashtable_t **library, book_t new_book) {
 
 		int ok = check_for_resize(new_book.book);
 		if (ok == 1) {
-			RESIZE_HASHTABLE(new_book.book);
+			RESIZE_HASHTABLE(&new_book.book, -1);
 		}
 		ht_put(new_book.book, key, strlen(key) + 1, val, strlen(val) + 1);
 		num++;
@@ -599,7 +558,8 @@ void ADD_BOOK(hashtable_t **library, book_t new_book) {
 	
 	int ok = check_for_resize(*library);
 	if (ok == 1) {
-		RESIZE_HASHTABLE(*library);
+		int size = sizeof(book_t);
+		RESIZE_HASHTABLE(library, size);
 	}
 	ht_put(*library, new_book.name, strlen(new_book.name) + 1, &new_book, sizeof(book_t));
 }
@@ -643,7 +603,8 @@ void ADD_USER(hashtable_t **user) {
 		new_user.points = 100;
 		int ok = check_for_resize(*user);
 		if (ok == 1) {
-			RESIZE_HASHTABLE(*user);
+			int size = sizeof(user_t);
+			RESIZE_HASHTABLE(user, size);
 		}
 		ht_put(*user, new_user.user_name, strlen(new_user.user_name) + 1, &new_user, sizeof(user_t));
 	}
