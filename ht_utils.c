@@ -1,9 +1,11 @@
-//Copyright 2022 Dobrica Nicoleta Adriana
+// Copyright 2022 Dobrica Nicoleta Adriana
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "structs.h"
+#include "/home/student/structs.h"
+
+// function that creates a list
 
 ll_t* list_create(int data_size) {
 	ll_t *list = malloc(sizeof(ll_t));
@@ -12,6 +14,8 @@ ll_t* list_create(int data_size) {
 	list->head = NULL;
 	return list;
 }
+
+// freeing a list from memory
 
 void free_list(ll_t **list) {
 	node_t *aux = (*list)->head;
@@ -32,6 +36,8 @@ node_t* get_nth_node(ll_t *list, int n) {
 	}
 	return curr;
 }
+
+// adding a node on the nth position in a list
 
 void add_nth_node(ll_t *list, int n, const void *value) {
 	node_t *prev, *curr;
@@ -89,6 +95,8 @@ node_t* remove_nth_node(ll_t *list, int n) {
 	return curr;
 }
 
+// function that compares two strings
+
 int
 compare_function_strings(void *a, void *b)
 {
@@ -97,6 +105,8 @@ compare_function_strings(void *a, void *b)
 
 	return strcmp(str_a, str_b);
 }
+
+// an efficient hash function for strings to avoid collisions
 
 unsigned int
 hash_function_string(void *a)
@@ -111,11 +121,16 @@ hash_function_string(void *a)
 	return hash;
 }
 
+// function that creates a hashtable
+
 hashtable_t *
 ht_create(unsigned int hmax, unsigned int (*hash_function)(void*),
 		int (*compare_function)(void*, void*))
 {
 	hashtable_t *htable = malloc(sizeof(hashtable_t));
+
+	// allocating memory for our array of lists
+
     htable->buckets = malloc(hmax * sizeof(ll_t *));
     for (unsigned int i = 0; i < hmax; i++) {
         htable->buckets[i] = list_create(sizeof(info));
@@ -131,8 +146,12 @@ int
 ht_has_key(hashtable_t *ht, void *key)
 {
 	int index = ht->hash_function(key) % ht->hmax;
+
+	// getting the list we want to traverse
+
 	ll_t *bucket = ht->buckets[index];
 	node_t *current = bucket->head;
+
 	while (current) {
 		info *new_data = (info *)current->data;
 		if (ht->compare_function(key, new_data->key) == 0) {
@@ -153,6 +172,8 @@ ht_get(hashtable_t *ht, void *key)
 	}
 	node_t *current = bucket->head;
 	info *new_data = (info *)current->data;
+
+	// traversing our list until we find the data we need
 
 	while (current) {
 		if (ht->compare_function(key, new_data->key) != 0) {
@@ -176,6 +197,7 @@ ht_put(hashtable_t *ht, void *key, unsigned int key_size,
 	node_t *current = ht->buckets[index]->head;
 	while (current) {
 		info *data = (info *)current->data;
+		// if the key already exists, we replace the value
 		if (ht->compare_function(key, data->key) == 0) {
 			void *tmp = realloc(data->value, value_size);
 			data->value = tmp;
@@ -202,9 +224,13 @@ ht_remove_entry(hashtable_t *ht, void *key)
 	int cnt = 0;
 	node_t *current = bucket->head;
 	info *new_data = (info *)current->data;
+
 	if (ht_has_key(ht, key) == 0) {
 		return;
 	}
+
+	// getting the node we want to remove
+
 	while (current) {
 		if (ht->compare_function(key, new_data->key)) {
 			cnt++;
@@ -216,8 +242,11 @@ ht_remove_entry(hashtable_t *ht, void *key)
 	}
 
 	current = remove_nth_node(bucket, cnt);
-	if (!bucket->size)
+
+	if (!bucket->size) {
 		bucket->head = NULL;
+	}
+
 	info *data = (info *)current->data;
 	free(data->value);
 	free(data->key);
@@ -259,6 +288,9 @@ ht_free(hashtable_t **ht, int type)
 int check_for_resize(hashtable_t *ht) {
 	int check = 0;
 	float num_entries = ht->size;
+
+	// calculating the load factor to see if we need to resize the hashtable
+
 	float load_factor = num_entries / ht->hmax;
 	if (load_factor > 1) {
 		check = 1;
@@ -268,6 +300,7 @@ int check_for_resize(hashtable_t *ht) {
 
 void RESIZE_HASHTABLE(hashtable_t **ht, int type) {
 	int new_size = (*ht)->hmax * 2;
+	// creating a new hashtable
 	hashtable_t *new_ht = ht_create(new_size, hash_function_string,
 			compare_function_strings);
 	for (unsigned int i = 0; i < (*ht)->hmax; i++) {
@@ -277,16 +310,18 @@ void RESIZE_HASHTABLE(hashtable_t **ht, int type) {
 			info *data = (info *)current->data;
             int key_size = strlen((char *)data->key) + 1, value_size = 0;
 			if (type == 1) {
-				// definitii
+				// type 1 is for the hashtable of definitions
 				char *value = (char *)data->value;
 				value_size = strlen(value) + 1;
 			} else if (type == 2) {
-				// carti
+				// type 2 is for the hashtable of books
 				value_size = sizeof(book_t);
 			} else if (type == 3) {
-				// useri
+				// type 3 is for the hashtable of users
 				value_size = sizeof(user_t);
 			}
+			// putting the data into our new hashtable
+
 			ht_put(new_ht, data->key, key_size, data->value, value_size);
             free(data->key);
             free(data->value);

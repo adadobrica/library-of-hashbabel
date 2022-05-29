@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "structs.h"
-#include "ht_utils.h"
-#include "book_utils.h"
+#include "/home/student/structs.h"
+#include "/home/student/ht_utils.h"
+#include "/home/student/book_utils.h"
 
 #define HMAX_LIBRARY 10
 #define HMAX_USERS 10
@@ -24,6 +24,8 @@
 #define USER_BORROWED "You have already borrowed a book.\n"
 #define DEF_NOT_FOUND "The definition is not in the book.\n"
 
+// function that calculates the top ranking of users
+
 void print_top_users(hashtable_t *users) {
 	char top_user_name[ARR_MAX][MAX_BOOK_LEN];
 	int top_user_points[ARR_MAX];
@@ -32,6 +34,9 @@ void print_top_users(hashtable_t *users) {
 	for (unsigned int i = 0; i < users->hmax; i++) {
 		node_t *current = users->buckets[i]->head;
 		while (current) {
+			// getting each user and putting the name and points
+			// in two different arrays
+
 			info *data = (info *)current->data;
 			user_t *user_data = (user_t *)data->value;
 
@@ -41,6 +46,8 @@ void print_top_users(hashtable_t *users) {
 			current = current->next;
 		}
 	}
+
+	// sorting our two arrays using bubble sort
 
 	for (int i = 0; i < p_size; i++) {
 		for (int j = i + 1; j < p_size; j++) {
@@ -78,13 +85,19 @@ void print_top_users(hashtable_t *users) {
 	}
 }
 
+// adding a new user
 
 void ADD_USER(hashtable_t **user) {
 	user_t new_user;
 	scanf("%s", new_user.user_name);
+
+	// checking to see if the user already exists
+
 	if (ht_has_key(*user, new_user.user_name) == 1) {
 		printf("%s", USER_REGISTERED);
 	} else {
+		// setting the default values for each user
+
 		new_user.banned = 0;
 		new_user.borrow = 0;
 		new_user.points = 100;
@@ -100,6 +113,7 @@ void BORROW_BOOK(hashtable_t **user, hashtable_t **library) {
 	char garbage, random_value[2] = "X", user_name[MAX_DEF_LEN],
 	book_name[MAX_BOOK_LEN];
 	int days_available;
+
 	scanf("%s", user_name);
 	scanf("%c", &garbage);
 	get_book_name(book_name);
@@ -109,7 +123,11 @@ void BORROW_BOOK(hashtable_t **user, hashtable_t **library) {
 		printf("%s", USER_NOT_REGISTERED);
 	} else {
 		int valid = 1;
+		// getting the data of the user that borrows the book
 		user_t *u = (user_t *)ht_get(*user, user_name);
+
+		// checking if the user is banned or already borrows a book
+
 		if (u->banned == 1) {
 			printf("%s", BANNED_USER);
 			valid = 0;
@@ -121,6 +139,9 @@ void BORROW_BOOK(hashtable_t **user, hashtable_t **library) {
 			valid = 0;
 		} else if (valid == 1){
 			book_t *b = (book_t *)ht_get(*library, book_name);
+
+			// checking if the book is borrowed already
+
 			if (b->borrowed == 1) {
 				printf("%s", BORROWED_BOOK);
 				memmove(u->book_name, random_value, strlen(random_value) + 1);
@@ -144,6 +165,9 @@ void RETURN_BOOK(hashtable_t **user, hashtable_t **library) {
 
 	user_t *u = (user_t *)ht_get(*user, user_name);
 	int valid = 0;
+
+	// if the user is banned, they cannot return a book
+
 	if (u->banned == 1) {
 		printf("%s", BANNED_USER);
 		valid = 1;
@@ -155,6 +179,8 @@ void RETURN_BOOK(hashtable_t **user, hashtable_t **library) {
 			check = 1;
 		}
 		if (check == 0) {
+			// calculating the user's points
+
 			if (days_since_borrow - u->days > 0) {
 				int lost_points = (days_since_borrow - u->days) * 2;
 				u->points = u->points - lost_points;
@@ -165,6 +191,9 @@ void RETURN_BOOK(hashtable_t **user, hashtable_t **library) {
 			if (u->points < 0) {
 				u->banned = 1;
 				u->borrow = 0;
+
+				// updating the information of the book
+
 				book_t *b = (book_t *)ht_get(*library, book_name);
 				b->purchases = b->purchases + 1;
 				b->rating = (b->rating * (b->purchases - 1) + rating) /
@@ -195,11 +224,15 @@ void LOST_BOOK(hashtable_t **user, hashtable_t **library) {
 		printf("%s", USER_NOT_REGISTERED);
 		valid = 0;
 	}
+
 	if (valid == 1) {
 		user_t *u = (user_t *)ht_get(*user, user_name);
+
 		if (u->banned == 1) {
 			printf("%s", BANNED_USER);
 		} else {
+			// if the user loses the book, they lose 50 points
+
 			u->points = u->points - 50;
 			if (u->points < 0) {
 				u->banned = 1;
@@ -211,6 +244,7 @@ void LOST_BOOK(hashtable_t **user, hashtable_t **library) {
 				printf("%s", BOOK_NOT_FOUND);
 				return;
 			}
+			// removing the lost book from our hashtable
 			book_t *b = (book_t *)ht_get(*library, book_name);
 			hashtable_t *defs = (hashtable_t *)b->book;
 			ht_free(&defs, 2);

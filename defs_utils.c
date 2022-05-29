@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "structs.h"
-#include "ht_utils.h"
-#include "book_utils.h"
-#include "user_utils.h"
+#include "/home/student/structs.h"
+#include "/home/student/ht_utils.h"
+#include "/home/student/book_utils.h"
+#include "/home/student/user_utils.h"
 
 #define HMAX_LIBRARY 10
 #define HMAX_USERS 10
@@ -25,6 +25,8 @@
 #define USER_BORROWED "You have already borrowed a book.\n"
 #define DEF_NOT_FOUND "The definition is not in the book.\n"
 
+// adding a definition to an already existing book
+
 void ADD_DEF(hashtable_t **library) {
 	char garbage, key[MAX_DEF_LEN], val[MAX_DEF_LEN], book_name[MAX_BOOK_LEN];
 	scanf("%c", &garbage);
@@ -32,11 +34,16 @@ void ADD_DEF(hashtable_t **library) {
 	scanf("%s %s", key, val);
 	int ok = 0;
 
+	// checking if the book exists
+
 	if (ht_has_key(*library, book_name) == 0) {
 		printf("%s", BOOK_NOT_FOUND);
 		ok = 1;
 	}
 	if (ok == 0) {
+		// checking if we need to resize the book hashtable
+		// before adding a new definition to it
+
 		book_t *b = (book_t *)ht_get(*library, book_name);
 		if (check_for_resize(b->book)) {
 			hashtable_t *defs = b->book;
@@ -46,6 +53,8 @@ void ADD_DEF(hashtable_t **library) {
 		ht_put(b->book, key, strlen(key) + 1, val, strlen(val) + 1);
 	}
 }
+
+// getting the definition from a book
 
 void GET_DEF(hashtable_t **library) {
 	char garbage, key[MAX_DEF_LEN], book_name[MAX_BOOK_LEN];
@@ -64,11 +73,14 @@ void GET_DEF(hashtable_t **library) {
 		if (ht_has_key(defs, key) == 0) {
 			printf("%s", DEF_NOT_FOUND);
 		} else {
+			// printing the value of the desired definition
 			char *val = (char *)ht_get(defs, key);
 			printf("%s\n", val);
 		}
 	}
 }
+
+// function that removes a certain definition based on a given key
 
 void RMV_DEF(hashtable_t **library) {
 	char garbage, key[MAX_DEF_LEN], book_name[MAX_BOOK_LEN];
@@ -81,7 +93,9 @@ void RMV_DEF(hashtable_t **library) {
 		printf("%s", BOOK_NOT_FOUND);
 		ok = 1;
 	}
+
 	if (ok == 0) {
+		// getting the book we needed and then removing the definition
 		book_t *b = (book_t *)ht_get(*library, book_name);
 		hashtable_t *def = (hashtable_t *)b->book;
 		if (ht_has_key(def, key) == 0) {

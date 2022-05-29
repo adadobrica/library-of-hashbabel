@@ -6,10 +6,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "structs.h"
-#include "ht_utils.h"
-#include "book_utils.h"
-#include "user_utils.h"
+#include "/home/student/structs.h"
+#include "/home/student/ht_utils.h"
+#include "/home/student/book_utils.h"
+#include "/home/student/user_utils.h"
 
 void ADD_DEF(hashtable_t **library);
 void GET_DEF(hashtable_t **library);

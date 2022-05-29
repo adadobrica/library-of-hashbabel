@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "structs.h"
+#include "/home/student/structs.h"
 
 ll_t* list_create(int data_size);
 void free_list(ll_t **list);

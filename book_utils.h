@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "structs.h"
-#include "ht_utils.h"
+#include "/home/student/structs.h"
+#include "/home/student/ht_utils.h"
 
 #define MAX_BOOK_LEN 40
 #define MAX_STRING_SIZE 256

@@ -46,7 +46,7 @@ typedef struct user_t {
 typedef struct book_t {
 	hashtable_t *book;
 	char name[MAX_BOOK_LEN];
-	float rating;
+	double rating;
 	int purchases;
 	int borrowed;
 } book_t;
